@@ -1,3 +1,5 @@
+package Agents;
+
 import jade.core.Agent;
 
 public class ReasonableAgent extends Agent{
@@ -7,3 +9,4 @@ public class ReasonableAgent extends Agent{
     }
 
 }
+

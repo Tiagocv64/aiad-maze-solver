@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="29b1f10d-e634-4668-9356-a0fac03fd1de" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="MultiAgentMaze" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1irPszNld1MZuNaljL9BrmDq1Ib" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/libs" />
+    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\35192\Desktop\MultiAgentMaze\src\libs" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\35192\Desktop\MultiAgentMaze" />
+      <recent name="C:\Users\35192\Desktop\MultiAgentMaze\src\libs" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle assemble" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.App">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="App" />
+      <module name="MultiAgentMaze.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Boot" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="jade.Boot" />
+      <module name="MultiAgentMaze.main" />
+      <option name="PROGRAM_PARAMETERS" value="-gui" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="jade.Boot" />
+      <option name="PROGRAM_PARAMETERS" value="-gui" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MultiAgentMaze [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="assemble" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="MultiAgentMaze [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.Unnamed" />
+      <item itemvalue="Application.Boot" />
+      <item itemvalue="Application.App" />
+      <item itemvalue="Gradle.MultiAgentMaze [dependencies]" />
+      <item itemvalue="Gradle.MultiAgentMaze [assemble]" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+        <item itemvalue="Gradle.MultiAgentMaze [assemble]" />
+        <item itemvalue="Gradle.MultiAgentMaze [dependencies]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="29b1f10d-e634-4668-9356-a0fac03fd1de" name="Default Changelist" comment="" />
+      <created>1602662947276</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602662947276</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1191" y="191" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602672504573">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1191" y="191" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1602672504573" />
+    <state x="1649" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1602672055625">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1649" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1602672055625" />
+    <state x="1060" y="237" key="FileChooserDialogImpl" timestamp="1602672415868">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1060" y="237" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1602672415868" />
+    <state width="1470" height="276" key="GridCell.Tab.0.bottom" timestamp="1602672512862">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1470" height="276" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602672512862" />
+    <state width="1470" height="276" key="GridCell.Tab.0.center" timestamp="1602672512862">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1470" height="276" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602672512862" />
+    <state width="1470" height="276" key="GridCell.Tab.0.left" timestamp="1602672512862">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1470" height="276" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602672512862" />
+    <state width="1470" height="276" key="GridCell.Tab.0.right" timestamp="1602672512862">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1470" height="276" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602672512862" />
+    <state x="1520" y="130" key="SettingsEditor" timestamp="1602672470478">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1520" y="130" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1602672470478" />
+    <state x="1576" y="242" width="672" height="677" key="run.anything.popup" timestamp="1602672394123">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1576" y="242" width="672" height="677" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1602672394123" />
+  </component>
+</project>

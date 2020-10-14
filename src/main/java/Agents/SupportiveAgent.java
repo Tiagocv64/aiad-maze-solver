@@ -1,3 +1,5 @@
+package Agents;
+
 import jade.core.Agent;
 
 public class SupportiveAgent extends Agent{

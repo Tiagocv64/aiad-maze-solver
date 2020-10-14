@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+mainClassName = "App"
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation name: 'jade'
+    implementation fileTree(include: ['*.jar'], dir: 'libs/lib')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
