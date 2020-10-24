@@ -1,7 +1,8 @@
 package Maze;
 
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 public class Maze
 {
@@ -9,14 +10,26 @@ public class Maze
     public static final int MARGIN = 0; // buffer between window edge and maze
     public static final int DOT_SIZE = 10; // size of maze solution dot
     public static final int DOT_MARGIN = 5; // space between wall and dot
-    private int N;
+    private int N; // size of maze
     private Cell[] cells; // array containing all the cells in the maze
     private boolean[] path; // array representing the unique path solution
+    private List<Color> colors = new ArrayList<>();
+    private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
+    private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
+    private int doorsNumber = 5;
 
     public Maze(int n)
     {
         N = n;
         cells = new Cell[N * N]; // creates array of Cells
+        colors.add(Color.GREEN);
+        colors.add(Color.MAGENTA);
+        colors.add(Color.CYAN);
+        colors.add(Color.BLUE);
+        colors.add(Color.ORANGE);
+        colors.add(Color.PINK);
+        colors.add(Color.GRAY);
+        colors.add(Color.YELLOW);
 
         for (int i = 0; i < N * N; i++) // initializes array with Cell objects
         {
@@ -26,7 +39,7 @@ public class Maze
         if(N > 0)
         {
             makeWalls(); // updates wall information inside each Cell object
-            clearWalls(); // destoys wall until a maze is formed
+            clearWalls(); // destroys wall until a maze is formed
 
             path = new boolean[N * N];
             createPath();
@@ -51,6 +64,7 @@ public class Maze
     final int SOUTH = 1 ;
     final int EAST = 2 ;
     final int WEST = 3 ;
+
 
     public void makeWalls() // fills wall information in Cells, -1 represents a
     // border wall
@@ -127,21 +141,41 @@ public class Maze
 
     public void createPath() // finds a path in the maze
     {
+        Random generator = new Random();
         if( N != 1) //if maze is not of size 1
         {
-            depthSearch(0); // executes a first breath search starting on the top
-            // left cell
+            depthSearch(0); // executes a first breath search starting on the top left cell
 
             path[0] = true; // path starts on top left cell
             path[N * N - 1] = true; // path ends on bottom right cell
 
-            int current = cells[N * N - 1].visitedBy; // start on the last, bottom
-            // right cell
+            int current = cells[N * N - 1].visitedBy; // start on the last, bottom right cell
+            int distanceBetweenDoors = 0;
+            Door lastDoor = null;
             while (current != 0) // follows the path back to the starting cell
             {
+                if (doorsNumber > 0 && distanceBetweenDoors > 15 && generator.nextInt(99) > 60) {
+                    if (lastDoor != null) {
+                        Button button = createButton(current, 10);
+                        button.setDoor(lastDoor);
+                        lastDoor.setButton(button);
+                        buttons.put(button.getCell(), button);
+                    }
+                    Color randomColor = colors.get(generator.nextInt(colors.size()));
+                    colors.remove(randomColor);
+                    lastDoor = new Door(randomColor);
+                    doors.put(current, lastDoor);
+                    doorsNumber--;
+                    distanceBetweenDoors = 0;
+                }
                 path[current] = true;
                 current = cells[current].visitedBy;
+                distanceBetweenDoors++;
             }
+            Button button = createButton(current, 4);
+            button.setDoor(lastDoor);
+            lastDoor.setButton(button);
+            buttons.put(button.getCell(), button);
         }
         else // if maze is of size 1
         {
@@ -151,6 +185,47 @@ public class Maze
         cells[0].walls[WEST] = N * N; // destroys west wall on top left cell
         cells[N * N - 1].walls[EAST] = N * N; // destroys east wall on bottom right
         // cell
+    }
+
+    public Button createButton(int cell, int distance) {
+        if (distance == 0) {
+            return new Button(cell);
+        }
+
+        Cell startCell = cells[cell];
+        Random generator = new Random();
+        List<Integer> possibleDirections = new ArrayList<>();
+        possibleDirections.add(NORTH);
+        possibleDirections.add(SOUTH);
+        possibleDirections.add(EAST);
+        possibleDirections.add(WEST);
+
+        Integer direction = possibleDirections.get(generator.nextInt(possibleDirections.size()));
+        while (startCell.walls[direction] != N * N) {
+            possibleDirections.remove(direction);
+            direction = possibleDirections.get(generator.nextInt(possibleDirections.size()));
+        }
+
+        int adjacent = -1;
+
+        if (direction == NORTH)
+        {
+            adjacent = cell - N;
+        }
+        if (direction == SOUTH)
+        {
+            adjacent = cell + N;
+        }
+        if (direction == EAST)
+        {
+            adjacent = cell + 1;
+        }
+        if (direction == WEST)
+        {
+            adjacent = cell - 1;
+        }
+
+        return createButton(adjacent, distance - 1);
     }
 
     public void depthSearch(int cell) // executes a first breath search to find
@@ -252,12 +327,20 @@ public class Maze
 
                 if (path[count] == true) // if cell is part of the path
                 {
+                    if (doors.containsKey(count)) {
+                        g.setColor(doors.get(count).getColor());
+                    }
                     g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a red
-                    // circle in the
-                    // cell
-
                 }
+
+                if (buttons.containsKey(count)) {
+                    g.setColor(buttons.get(count).getDoor().getColor());
+                    g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                            + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE);
+                }
+
+                g.setColor(Color.RED);
             }
         }
     }

@@ -12,7 +12,6 @@ import jade.wrapper.StaleProxyException;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello boy");
         try
         {
             int size = 30;
@@ -34,6 +33,7 @@ public class App {
             System.out.println("Input boyyyy") ;
         }
 
+        /*
         Runtime rt = Runtime.instance();
         Profile p = new ProfileImpl();
         p.setParameter(Profile.GUI, "true");
@@ -48,6 +48,6 @@ public class App {
             acReasonable.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
-        }
+        } */
     }
 }
