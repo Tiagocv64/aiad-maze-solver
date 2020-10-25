@@ -16,11 +16,12 @@ public class Maze
     private List<Color> colors = new ArrayList<>();
     private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
-    private int doorsNumber = 5;
+    private int doorsNumber;
 
-    public Maze(int n)
+    public Maze(int n, int doors)
     {
         N = n;
+        doorsNumber = doors;
         cells = new Cell[N * N]; // creates array of Cells
         colors.add(Color.GREEN);
         colors.add(Color.MAGENTA);
