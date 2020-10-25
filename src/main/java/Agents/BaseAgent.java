@@ -2,14 +2,21 @@ package Agents;
 
 import Maze.Maze;
 import Maze.MazeRunner;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
+import jade.proto.ContractNetInitiator;
+
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class BaseAgent extends Agent{
 
@@ -38,6 +45,23 @@ public class BaseAgent extends Agent{
         } catch(FIPAException e) {
             e.printStackTrace();
         }
+    }
+
+    public void startContract(){
+        // Fill the CFP message
+        ACLMessage msg = new ACLMessage(ACLMessage.CFP);
+
+        String[] names = {"Tiago", "Rafa", "Sousa"};
+
+        for (String name : names) {
+            msg.addReceiver(new AID(name, AID.ISLOCALNAME));
+        }
+        msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
+        // We want to receive a reply in 10 secs
+        msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+        msg.setContent("dummy-action");
+
+        addBehaviour(new ContractInitiator(this, msg));
     }
 
     private void sendMessageToAllAgents(String message){
@@ -103,6 +127,10 @@ public class BaseAgent extends Agent{
             }
 
             sendMessageToAllAgents(getLocalName() + ": " + baseAgent.currentY + " " + baseAgent.currentX);
+
+            if (Math.random()*100 < 25){
+                this.baseAgent.startContract();
+            }
         }
         public boolean done() {
             return n > 5;
@@ -129,6 +157,45 @@ public class BaseAgent extends Agent{
 
         public boolean done() {
             return n > 10;
+        }
+    }
+
+    class ContractInitiator extends ContractNetInitiator {
+
+        public ContractInitiator(Agent a, ACLMessage cfp) {
+            super(a, cfp);
+        }
+
+        @Override
+        protected void handleAllResponses(Vector responses, Vector acceptances) {
+            if (responses.size() < 3) {
+                // Some responder didn't reply within the specified timeout
+                System.out.println("Timeout expired: missing "+(3 - responses.size())+" responses");
+            }
+            // Evaluate proposals.
+            int bestProposal = -1;
+            AID bestProposer = null;
+            ACLMessage accept = null;
+            Enumeration e = responses.elements();
+            while (e.hasMoreElements()) {
+                ACLMessage msg = (ACLMessage) e.nextElement();
+                if (msg.getPerformative() == ACLMessage.PROPOSE) {
+                    ACLMessage reply = msg.createReply();
+                    reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+                    acceptances.addElement(reply);
+                    int proposal = Integer.parseInt(msg.getContent());
+                    if (proposal > bestProposal) {
+                        bestProposal = proposal;
+                        bestProposer = msg.getSender();
+                        accept = reply;
+                    }
+                }
+            }
+            // Accept the proposal of the best proposer
+            if (accept != null) {
+                System.out.println("Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
+                accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+            }
         }
     }
 
