@@ -10,8 +10,8 @@ public class Maze
     public static final int MARGIN = 0; // buffer between window edge and maze
     public static final int DOT_SIZE = 10; // size of maze solution dot
     public static final int DOT_MARGIN = 5; // space between wall and dot
-    private int N; // size of maze
-    private Cell[] cells; // array containing all the cells in the maze
+    public int N; // size of maze
+    public Cell[] cells; // array containing all the cells in the maze
     private boolean[] path; // array representing the unique path solution
     private List<Color> colors = new ArrayList<>();
     private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
@@ -60,10 +60,10 @@ public class Maze
         }
     }
 
-    final int NORTH = 0 ;
-    final int SOUTH = 1 ;
-    final int EAST = 2 ;
-    final int WEST = 3 ;
+    public static final int NORTH = 0 ;
+    public static final int SOUTH = 1 ;
+    public static final int EAST = 2 ;
+    public static final int WEST = 3 ;
 
 
     public void makeWalls() // fills wall information in Cells, -1 represents a

@@ -1,10 +1,9 @@
 package Agents;
 
-import jade.core.Agent;
-
-public class SelfishAgent extends Agent{
+public class SelfishAgent extends BaseAgent{
 
     public void setup(){
+        super.setup();
         System.out.println("I'm selfish");
     }
 

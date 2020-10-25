@@ -1,10 +1,9 @@
 package Agents;
 
-import jade.core.Agent;
-
-public class ReasonableAgent extends Agent{
+public class ReasonableAgent extends BaseAgent{
 
     public void setup(){
+        super.setup();
         System.out.println("I'm reasonable");
     }
 

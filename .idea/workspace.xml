@@ -2,26 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29b1f10d-e634-4668-9356-a0fac03fd1de" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.2.2/javaCompile/javaCompile.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Agents/BaseAgent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeRunner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/ReasonableAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/ReasonableAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/SelfishAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/SelfishAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/SupportiveAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/SupportiveAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Maze/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/Maze.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +35,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="MultiAgentMaze" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -64,9 +53,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1irPszNld1MZuNaljL9BrmDq1Ib" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -94,6 +83,8 @@
   </component>
   <component name="RunManager" selected="Application.App">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="MultiAgentMaze.main" />
       <method v="2">
@@ -182,9 +173,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="1191" y="191" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602672504573">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="195" y="124" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603632500801">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="195" y="124" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1603632500801" />
     <state x="1191" y="191" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1602672504573" />
     <state x="1649" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1602672055625">
       <screen x="0" y="0" width="2560" height="1040" />
@@ -194,25 +186,30 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1060" y="237" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1602672415868" />
-    <state width="1234" height="276" key="GridCell.Tab.0.bottom" timestamp="1602681922315">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1603638934539">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1603638934539" />
     <state width="1234" height="276" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1234" height="276" key="GridCell.Tab.0.center" timestamp="1602681922315">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1603638934538">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1603638934538" />
     <state width="1234" height="276" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1234" height="276" key="GridCell.Tab.0.left" timestamp="1602681922315">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1603638934538">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1603638934538" />
     <state width="1234" height="276" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1234" height="276" key="GridCell.Tab.0.right" timestamp="1602681922315">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1603638934539">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1603638934539" />
     <state width="1234" height="276" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state x="1520" y="130" key="SettingsEditor" timestamp="1602672470478">
-      <screen x="0" y="0" width="2560" height="1040" />
+    <state x="290" y="108" key="SettingsEditor" timestamp="1603632275167">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="290" y="108" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1603632275167" />
     <state x="1520" y="130" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1602672470478" />
     <state x="1576" y="242" width="672" height="677" key="run.anything.popup" timestamp="1602672394123">
       <screen x="0" y="0" width="2560" height="1040" />

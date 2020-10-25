@@ -1,10 +1,9 @@
 package Agents;
 
-import jade.core.Agent;
-
-public class SupportiveAgent extends Agent{
+public class SupportiveAgent extends BaseAgent{
 
     public void setup(){
+        super.setup();
         System.out.println("I'm supportive");
     }
 
