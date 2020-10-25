@@ -173,10 +173,12 @@ public class Maze
                 current = cells[current].visitedBy;
                 distanceBetweenDoors++;
             }
+            if (lastDoor != null) {
             Button button = createButton(current, 4);
             button.setDoor(lastDoor);
             lastDoor.setButton(button);
             buttons.put(button.getCell(), button);
+            }
         }
         else // if maze is of size 1
         {
