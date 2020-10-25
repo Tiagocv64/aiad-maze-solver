@@ -42,10 +42,10 @@ public class App {
 
         try {
             AgentController acSelfish = container.createNewAgent("Tiago", "Agents.SelfishAgent", new Object[] {mazeRunner});
-//            AgentController acSupportive = container.createNewAgent("Rafa", "Agents.SupportiveAgent", new Object[] {mazeRunner});
+            AgentController acSupportive = container.createNewAgent("Rafa", "Agents.SupportiveAgent", new Object[] {mazeRunner});
 //            AgentController acReasonable = container.createNewAgent("Sousa", "Agents.ReasonableAgent", new Object[] {mazeRunner});
             acSelfish.start();
-//            acSupportive.start();
+            acSupportive.start();
 //            acReasonable.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
