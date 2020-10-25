@@ -20,9 +20,21 @@ public class App {
         Scanner input = new Scanner(System.in);
         int size = rangeCheck("Maze size (in blocks): ", input, 15, 40);
         int doors = rangeCheck("Doors present: ", input, 0, 8);
-        int selfishNumber = rangeCheck("Number of selfish agents: ", input, 0, 10);
-        int reasonableNumber = rangeCheck("Number of reasonable agents: ", input, 0, 10);
-        int supportiveNumber = rangeCheck("Number of supportive agents: ", input, 0, 10);
+        boolean enoughAgents = false;
+        int selfishNumber = 0;
+        int reasonableNumber = 0;
+        int supportiveNumber = 0;
+        while (!enoughAgents) {
+            selfishNumber = rangeCheck("Number of selfish agents: ", input, 0, 10);
+            reasonableNumber = rangeCheck("Number of reasonable agents: ", input, 0, 10);
+            supportiveNumber = rangeCheck("Number of supportive agents: ", input, 0, 10);
+            int totalAgents = selfishNumber + reasonableNumber + supportiveNumber;
+            if (doors >= totalAgents) {
+                System.out.println("Total number of agents (" + totalAgents + ") needs to be bigger than the amount of doors in the maze (" + doors + ")");
+                continue;
+            }
+            enoughAgents = true;
+        }
 
         SelfishAgent[] selfishAgents = new SelfishAgent[selfishNumber];
         for (int i = 0; i < selfishNumber; i++) {
