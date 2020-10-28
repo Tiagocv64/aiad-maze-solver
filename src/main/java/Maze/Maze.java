@@ -18,9 +18,9 @@ public class Maze
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
     private int doorsNumber;
 
-    public Maze(int n, int doors)
+    public Maze(int size, int doors)
     {
-        N = n;
+        N = size;
         doorsNumber = doors;
         cells = new Cell[N * N]; // creates array of Cells
         colors.add(Color.GREEN);
@@ -51,13 +51,14 @@ public class Maze
     public class Cell // Class representing a cell in a maze.
     {
         int[] walls; // array representing north, south, east, west walls
-        int visitedBy; // for running first breath search, saves the cell that
-        // visited this cell
+        int visitedBy; // for running first breath search, saves the cell that visited this cell
+        boolean isPath;
 
         public Cell()
         {
             walls = new int[4];
             visitedBy = -1;
+            isPath = false;
         }
     }
 
@@ -155,9 +156,10 @@ public class Maze
             Door lastDoor = null;
             while (current != 0) // follows the path back to the starting cell
             {
+                cells[current].isPath = true;
                 if (doorsNumber > 0 && distanceBetweenDoors > 15 && generator.nextInt(99) > 60) {
                     if (lastDoor != null) {
-                        Button button = createButton(current, 10);
+                        Button button = createButton(current, 20);
                         button.setDoor(lastDoor);
                         lastDoor.setButton(button);
                         buttons.put(button.getCell(), button);
@@ -192,24 +194,26 @@ public class Maze
 
     public Button createButton(int cell, int distance) {
         if (distance == 0) {
+            if (cells[cell].isPath)
+                return createButton(cell, 1);
             return new Button(cell);
         }
 
         Cell startCell = cells[cell];
+        Cell currentCell = cells[cell];
         Random generator = new Random();
         List<Integer> possibleDirections = new ArrayList<>();
         possibleDirections.add(NORTH);
         possibleDirections.add(SOUTH);
         possibleDirections.add(EAST);
         possibleDirections.add(WEST);
+        int adjacent = -1;
 
         Integer direction = possibleDirections.get(generator.nextInt(possibleDirections.size()));
         while (startCell.walls[direction] != N * N) {
             possibleDirections.remove(direction);
             direction = possibleDirections.get(generator.nextInt(possibleDirections.size()));
         }
-
-        int adjacent = -1;
 
         if (direction == NORTH)
         {
@@ -227,6 +231,8 @@ public class Maze
         {
             adjacent = cell - 1;
         }
+
+        currentCell = cells[adjacent];
 
         return createButton(adjacent, distance - 1);
     }
@@ -332,9 +338,10 @@ public class Maze
                 {
                     if (doors.containsKey(count)) {
                         g.setColor(doors.get(count).getColor());
+
+                        g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                              + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
                     }
-                    g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
-                            + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a red
                 }
 
                 if (buttons.containsKey(count)) {

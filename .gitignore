@@ -1,5 +1,9 @@
 **/.DS_Store
-.idea/
+.idea
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!src/**/build/
 .gradle
 MTPs-Main-Container.txt
 APDescription.txt
