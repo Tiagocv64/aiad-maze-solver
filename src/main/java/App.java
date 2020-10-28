@@ -7,6 +7,7 @@ import Agents.ReasonableAgent;
 import Agents.SelfishAgent;
 import Agents.SupportiveAgent;
 import Maze.*;
+import Agents.SelfishAgent;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -17,6 +18,7 @@ import jade.wrapper.StaleProxyException;
 
 public class App {
     public static void main(String[] args) {
+
         Scanner input = new Scanner(System.in);
         int size = rangeCheck("Maze size (in blocks): ", input, 15, 40);
         int doors = rangeCheck("Doors present: ", input, 0, 8);
@@ -60,22 +62,23 @@ public class App {
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.setVisible(true);
 
-        /*
+        MazeRunner mazeRunner = new MazeRunner(maze);
+
         Runtime rt = Runtime.instance();
         Profile p = new ProfileImpl();
         p.setParameter(Profile.GUI, "true");
         AgentContainer container = rt.createMainContainer(p);
 
         try {
-            AgentController acSelfish = container.createNewAgent("Tiago", "SelfishAgent", null);
-            AgentController acSupportive = container.createNewAgent("Rafa", "SupportiveAgent", null);
-            AgentController acReasonable = container.createNewAgent("Sousa", "ReasonableAgent", null);
+            AgentController acSelfish = container.createNewAgent("Tiago", "Agents.SelfishAgent", new Object[] {mazeRunner});
+            AgentController acSupportive = container.createNewAgent("Rafa", "Agents.SupportiveAgent", new Object[] {mazeRunner});
+            AgentController acReasonable = container.createNewAgent("Sousa", "Agents.ReasonableAgent", new Object[] {mazeRunner});
             acSelfish.start();
             acSupportive.start();
             acReasonable.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
-        } */
+        }
     }
     private static int rangeCheck(String question, Scanner input, int min, int max) {
         boolean acceptedNumber = false;
