@@ -2,20 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29b1f10d-e634-4668-9356-a0fac03fd1de" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Agents/BaseAgent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Maze/MazeRunner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/ReasonableAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/ReasonableAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/SelfishAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/SelfishAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/SupportiveAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/SupportiveAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Agents/BaseAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Agents/BaseAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Maze/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Maze/Maze.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,25 +181,25 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1060" y="237" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1602672415868" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1603665992914">
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1603878886751">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1603665992914" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1603878886751" />
     <state width="1234" height="276" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1603665992913">
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1603878886750">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1603665992913" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1603878886750" />
     <state width="1234" height="276" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1603665992912">
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1603878886749">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1603665992912" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1603878886749" />
     <state width="1234" height="276" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1603665992913">
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1603878886750">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1603665992913" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1603878886750" />
     <state width="1234" height="276" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1602681922315" />
     <state x="290" y="108" key="SettingsEditor" timestamp="1603632275167">
       <screen x="0" y="0" width="1440" height="900" />
