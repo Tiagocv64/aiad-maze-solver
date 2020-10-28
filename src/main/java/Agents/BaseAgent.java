@@ -51,7 +51,8 @@ public class BaseAgent extends Agent{
         // Fill the CFP message
         ACLMessage msg = new ACLMessage(ACLMessage.CFP);
 
-        String[] names = {"Tiago", "Rafa", "Sousa"};
+        // TODO get all agents names
+        String[] names = {"selfish0", "reasonable0", "supportive0"};
 
         for (String name : names) {
             msg.addReceiver(new AID(name, AID.ISLOCALNAME));

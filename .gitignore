@@ -9,3 +9,5 @@ MTPs-Main-Container.txt
 APDescription.txt
 build
 out/
+bin/
+.settings
