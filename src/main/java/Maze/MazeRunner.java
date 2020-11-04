@@ -2,12 +2,11 @@ package Maze;
 
 public class MazeRunner {
     Maze maze;
-    int initialY, initialX;
+    private Position position;
 
     public MazeRunner(Maze maze){
         this.maze = maze;
-        initialY = maze.N-1;
-        initialX = maze.N-1;
+        this.position = new Position(0, 0);
     }
 
     public boolean[] getPossibleMovesFromPosition(int y, int x){
@@ -21,11 +20,8 @@ public class MazeRunner {
         return maze.cells[y*maze.N+x];
     }
 
-    public int getInitialY() {
-        return initialY;
-    }
 
-    public int getInitialX() {
-        return initialX;
+    public Position getPosition() {
+        return position;
     }
 }

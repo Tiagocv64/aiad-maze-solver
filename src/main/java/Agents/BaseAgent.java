@@ -1,6 +1,7 @@
 package Agents;
 
 import Maze.Maze;
+import Maze.Position;
 import Maze.MazeRunner;
 import jade.core.AID;
 import jade.core.Agent;
@@ -21,13 +22,12 @@ import java.util.Vector;
 public class BaseAgent extends Agent{
 
     MazeRunner mazeRunner;
-    int currentY, currentX;
+    Position position;
 
     protected void setup() {
         Object[] args = getArguments();
         this.mazeRunner = (MazeRunner) args[0];
-        this.currentY = this.mazeRunner.getInitialY();
-        this.currentX = this.mazeRunner.getInitialX();
+        this.position = this.mazeRunner.getPosition();
 
         registerAgentToDF();
 
@@ -109,25 +109,25 @@ public class BaseAgent extends Agent{
 
         public void action() {
             System.out.println(++n + " I am doing something!");
-            System.out.println("Current pos: " + baseAgent.currentY + " " + baseAgent.currentX);
+            System.out.println("Current pos: " + baseAgent.position.getX() + " " + baseAgent.position.getY());
 
-            boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.currentY, baseAgent.currentX);
+            boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
-            if (possibleMoves[Maze.NORTH]){
-                System.out.println("Moving NORTH");
-                currentY--;
-            } else if (possibleMoves[Maze.WEST]){
-                System.out.println("Moving WEST");
-                currentX--;
-            } else if (possibleMoves[Maze.SOUTH]){
+            if (possibleMoves[Maze.SOUTH]){
                 System.out.println("Moving SOUTH");
-                currentY++;
+                position.setY(position.getY() + 1);
             } else if (possibleMoves[Maze.EAST]){
                 System.out.println("Moving EAST");
-                currentX++;
+                position.setX(position.getX() + 1);
+            } else if (possibleMoves[Maze.NORTH]){
+                System.out.println("Moving NORTH");
+                position.setY(position.getY() - 1);
+            } else if (possibleMoves[Maze.WEST]){
+                System.out.println("Moving WEST");
+                position.setX(position.getX() - 1);
             }
 
-            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.currentY + " " + baseAgent.currentX);
+            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
 
             if (Math.random()*100 < 25){
                 this.baseAgent.startContract();
