@@ -15,19 +15,22 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.proto.ContractNetInitiator;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 
 public class BaseAgent extends Agent{
 
     MazeRunner mazeRunner;
+    Position previousPosition;
     Position position;
+    Set<Position> visited = new HashSet<Position>();
+    Stack<Position> toVisit = new Stack<Position>();
 
     protected void setup() {
         Object[] args = getArguments();
         this.mazeRunner = (MazeRunner) args[0];
         this.position = this.mazeRunner.getPosition();
+        this.previousPosition= new Position(-1 , -1);
+        this.toVisit.push(this.position);
 
         registerAgentToDF();
 
@@ -110,24 +113,44 @@ public class BaseAgent extends Agent{
         public void action() {
             System.out.println(++n + " I am doing something!");
             System.out.println("Current pos: " + baseAgent.position.getX() + " " + baseAgent.position.getY());
-
+            previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
+            Position next = null;
             if (possibleMoves[Maze.SOUTH]){
-                System.out.println("Moving SOUTH");
-                position.setY(position.getY() + 1);
-            } else if (possibleMoves[Maze.EAST]){
-                System.out.println("Moving EAST");
-                position.setX(position.getX() + 1);
-            } else if (possibleMoves[Maze.NORTH]){
-                System.out.println("Moving NORTH");
-                position.setY(position.getY() - 1);
-            } else if (possibleMoves[Maze.WEST]){
-                System.out.println("Moving WEST");
-                position.setX(position.getX() - 1);
+                next = new Position(position.getX(), position.getY() + 1);
+                if (!visited.contains(next)) {
+                    toVisit.push(next);
+                }
+            }
+            else if (possibleMoves[Maze.EAST]) {
+                next = new Position(position.getX() + 1, position.getY());
+                if (!visited.contains(next)) {
+                    toVisit.push(next);
+                }
+            }
+            else if (possibleMoves[Maze.NORTH]) {
+                next = new Position(position.getX(), position.getY() - 1);
+                if (!visited.contains(next)) {
+                    toVisit.push(next);
+                }
+            }
+            else if (possibleMoves[Maze.WEST]){
+                next = new Position(position.getX() - 1, position.getY());
+                if (!visited.contains(next)) {
+                    toVisit.push(next);
+                }
+            }
+            else { // dead end
+                next = toVisit.pop();
+                System.out.println("DEAD END");
             }
 
+            position = next;
+            System.out.println("Next pos: " + position.getX() + " " + position.getY());
+
             sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
+            visited.add(position);
 
             if (Math.random()*100 < 25){
                 this.baseAgent.startContract();
