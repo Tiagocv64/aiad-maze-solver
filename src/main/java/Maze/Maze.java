@@ -1,8 +1,10 @@
 package Maze;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
 public class Maze
 {
@@ -17,6 +19,7 @@ public class Maze
     private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
     private int doorsNumber;
+    private int frame = 0;
 
     public Maze(int size, int doors)
     {
@@ -323,6 +326,7 @@ public class Maze
             }
         }
 
+        int animationCounter = 0;
         g.setColor(Color.RED); // changes color to draw the dots
         for (int i = 0; i < N; i++)
         {
@@ -336,12 +340,19 @@ public class Maze
 
                 if (path[count] == true) // if cell is part of the path
                 {
-                    if (doors.containsKey(count)) {
+                    if (animationCounter++ <= frame) {
+                        g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                                + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint path
+                    }
+
+                    /* paiting doors
+                    if (doors.containsKey(count) && animationCounter++ <= frame) {
                         g.setColor(doors.get(count).getColor());
 
                         g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                               + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
                     }
+                    */
                 }
 
                 if (buttons.containsKey(count)) {
@@ -353,6 +364,7 @@ public class Maze
                 g.setColor(Color.RED);
             }
         }
+        frame++;
     }
 
     public Dimension windowSize() // returns the ideal size of the window (for
