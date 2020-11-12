@@ -141,33 +141,24 @@ public class BaseAgent extends Agent{
             System.out.println(Arrays.toString(toVisit.toArray()));
 
             Position next = null;
-            if (possibleMoves[Maze.SOUTH]){
+            if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))){
                 next = new Position(position.getX(), position.getY() + 1);
-                if (!visited.contains(next)) {
-                    toVisit.push(next);
-                }
             }
-            else if (possibleMoves[Maze.EAST]) {
+            else if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY()))) {
                 next = new Position(position.getX() + 1, position.getY());
-                if (!visited.contains(next)) {
-                    toVisit.push(next);
-                }
             }
-            else if (possibleMoves[Maze.NORTH]) {
+            else if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1))) {
                 next = new Position(position.getX(), position.getY() - 1);
-                if (!visited.contains(next)) {
-                    toVisit.push(next);
-                }
             }
-            else if (possibleMoves[Maze.WEST]){
+            else if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))){
                 next = new Position(position.getX() - 1, position.getY());
-                if (!visited.contains(next)) {
-                    toVisit.push(next);
-                }
             }
-            else { // dead end
+
+            if (next == null) { // dead end
                 next = toVisit.pop();
                 System.out.println("DEAD END");
+            } else {
+                toVisit.push(next);
             }
 
             mazeRunner.updatePosition(position, next);
@@ -187,7 +178,7 @@ public class BaseAgent extends Agent{
             }
         }
         public boolean done() {
-            return n > 5;
+            return n > 20;
         }
     }
 
