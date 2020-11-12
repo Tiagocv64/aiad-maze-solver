@@ -1,6 +1,8 @@
 package Maze;
 
-public class DisjSets
+import java.io.Serializable;
+
+public class DisjSets implements Serializable
 {
     /**
      * Construct the disjoint sets object.

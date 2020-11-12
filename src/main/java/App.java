@@ -37,30 +37,27 @@ public class App {
             enoughAgents = true;
         }
 
-        Maze maze = new Maze(size, doors); // Constructs the maze object
-        MazeRunner mazeRunner = new MazeRunner(maze); // Middleware to use maze by agents
-
         Runtime rt = Runtime.instance();
         Profile p = new ProfileImpl();
         p.setParameter(Profile.GUI, "true");
         AgentContainer container = rt.createMainContainer(p);
 
-        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors, maze});
+        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors});
         mazeAgent.start();
 
         AgentController[] selfishAgents = new AgentController[selfishNumber];
         for (int i = 0; i < selfishNumber; i++) {
-            selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", new Object[] {mazeRunner});
+            selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", null);
             selfishAgents[i].start();
         }
         AgentController[] reasonableAgents = new AgentController[reasonableNumber];
         for (int i = 0; i < reasonableNumber; i++) {
-            reasonableAgents[i] = container.createNewAgent("reasonable" + i, "Agents.ReasonableAgent", new Object[] {mazeRunner});
+            reasonableAgents[i] = container.createNewAgent("reasonable" + i, "Agents.ReasonableAgent", null);
             reasonableAgents[i].start();
         }
         AgentController[] supportiveAgents = new AgentController[supportiveNumber];
         for (int i = 0; i < supportiveNumber; i++) {
-            supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", new Object[] {mazeRunner});
+            supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", null);
             supportiveAgents[i].start();
         }
 

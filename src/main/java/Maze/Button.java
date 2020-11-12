@@ -1,6 +1,8 @@
 package Maze;
 
-public class Button {
+import java.io.Serializable;
+
+public class Button implements Serializable {
     private Door door;
     private int cell;
 

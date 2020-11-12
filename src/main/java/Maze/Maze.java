@@ -8,7 +8,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Maze
+public class Maze implements Serializable
 {
     public static final int CELL_WIDTH = 20; // maze square size
     public static final int MARGIN = 0; // buffer between window edge and maze

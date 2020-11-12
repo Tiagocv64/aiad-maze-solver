@@ -23,19 +23,16 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseAgent extends Agent{
 
-    MazeRunner mazeRunner;
+    MazeRunner mazeRunner = null;
     Position previousPosition;
     Position position;
     Set<Position> visited = new HashSet<Position>();
     Stack<Position> toVisit = new Stack<Position>();
     protected Boolean isHandlingRequest = false;
     protected Integer effort = 0;
-    Maze.Cell[] cellsMaze = null;
 
     protected void setup() {
-        Object[] args = getArguments();
-        this.mazeRunner = (MazeRunner) args[0];
-        this.position = this.mazeRunner.getPosition();
+        this.position = new Position(0 , 0);
         this.previousPosition = new Position(-1 , -1);
         this.toVisit.push(this.position);
 
@@ -139,13 +136,13 @@ public class BaseAgent extends Agent{
 
         public void action() {
 
-            if (cellsMaze != null){
+            if (mazeRunner != null){
                 System.out.println("CELLS MAZE GOOD");
             } else {
                 System.out.println("CELLS MAZE BAD");
                 return;
             }
-//            System.out.println(++n + " I am doing something!");
+            n++;
             System.out.println("Current pos: " + baseAgent.position.getX() + " " + baseAgent.position.getY());
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
@@ -173,6 +170,9 @@ public class BaseAgent extends Agent{
             toVisit.push(next);
 
             mazeRunner.updatePosition(position, next);
+
+            sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Position[] {position, next}));
+
             position = next;
 
 //            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
@@ -203,8 +203,7 @@ public class BaseAgent extends Agent{
 
             ACLMessage msg = receive();
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-//                System.out.println(getLocalName() +
-//                        ": recebi " + msg.getContent());
+
                 AgentMessage agentMessage = null;
                 try {
                     agentMessage = (AgentMessage) msg.getContentObject();
@@ -219,7 +218,7 @@ public class BaseAgent extends Agent{
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ANSWER_MAZE_INFO:
 
-                        cellsMaze = (Maze.Cell[]) agentMessage.getContent();
+                        mazeRunner = (MazeRunner) agentMessage.getContent();
 
                         break;
                     default:

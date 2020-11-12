@@ -1,8 +1,9 @@
 package Maze;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Door {
+public class Door implements Serializable {
     private Button button;
     private Color color;
 

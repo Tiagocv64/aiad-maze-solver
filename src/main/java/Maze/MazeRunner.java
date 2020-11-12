@@ -1,7 +1,9 @@
 package Maze;
 
 
-public class MazeRunner {
+import java.io.Serializable;
+
+public class MazeRunner implements Serializable {
     Maze maze;
     private Position position;
 

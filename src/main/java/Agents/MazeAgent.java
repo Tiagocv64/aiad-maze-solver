@@ -2,6 +2,8 @@ package Agents;
 
 import Maze.Maze;
 import Maze.MazePanel;
+import Maze.MazeRunner;
+import Maze.Position;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -18,13 +20,15 @@ import java.io.IOException;
 public class MazeAgent extends Agent {
 
     Maze maze;
+    MazeRunner mazeRunner;
 
     @Override
     protected void setup() {
         Object[] args = getArguments();
         int mazeSize = (Integer) args[0];
         int mazeDoors = (Integer) args[1];
-        maze = (Maze) args[2];
+        maze = new Maze(mazeSize, mazeDoors);
+        mazeRunner = new MazeRunner(maze);
 
         registerMazeToDF();
 
@@ -80,8 +84,6 @@ public class MazeAgent extends Agent {
 
             ACLMessage msg = receive();
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-//                System.out.println(getLocalName() +
-//                        ": recebi " + msg.getContent());
                 AgentMessage agentMessage = null;
                 try {
                     agentMessage = (AgentMessage) msg.getContentObject();
@@ -100,11 +102,17 @@ public class MazeAgent extends Agent {
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.INFORM);
                             reply.setContentObject(new AgentMessage(getAID(), AgentMessage.ANSWER_MAZE_INFO,
-                                        maze.cells));
+                                        mazeRunner));
                             send(reply);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                        break;
+                    case AgentMessage.ASK_UPDATE_POS:
+
+                        Position[] positions = (Position[]) agentMessage.getContent();
+                        mazeRunner.updatePosition(positions[0], positions[1]);
 
                         break;
                     default:
