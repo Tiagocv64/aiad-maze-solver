@@ -347,7 +347,7 @@ public class Maze
                 }
 
 
-                if (agentPositions.containsKey(new Position(j, i))) {
+                if (agentPositions.containsKey(new Position(i, j))) {
                     g.setColor(Color.RED);
                     g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent

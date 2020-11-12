@@ -155,11 +155,12 @@ public class BaseAgent extends Agent{
             }
 
             if (next == null) { // dead end
+                toVisit.pop();
                 next = toVisit.pop();
                 System.out.println("DEAD END");
-            } else {
-                toVisit.push(next);
             }
+
+            toVisit.push(next);
 
             mazeRunner.updatePosition(position, next);
             position = next;
@@ -177,7 +178,7 @@ public class BaseAgent extends Agent{
             }
         }
         public boolean done() {
-            return n > 20;
+            return n > 40;
         }
     }
 
