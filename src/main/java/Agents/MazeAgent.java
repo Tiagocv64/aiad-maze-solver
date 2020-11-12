@@ -22,7 +22,7 @@ public class MazeAgent extends Agent {
         Object[] args = getArguments();
         int mazeSize = (Integer) args[0];
         int mazeDoors = (Integer) args[1];
-        maze = new Maze(mazeSize, mazeDoors);
+        maze = (Maze) args[2];
 
         registerMazeToDF();
 

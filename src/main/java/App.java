@@ -45,7 +45,7 @@ public class App {
         p.setParameter(Profile.GUI, "true");
         AgentContainer container = rt.createMainContainer(p);
 
-        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors});
+        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors, maze});
         mazeAgent.start();
 
         AgentController[] selfishAgents = new AgentController[selfishNumber];
