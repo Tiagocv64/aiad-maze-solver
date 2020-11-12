@@ -1,5 +1,6 @@
 package Maze;
 
+
 public class MazeRunner {
     Maze maze;
     private Position position;
@@ -23,5 +24,9 @@ public class MazeRunner {
 
     public Position getPosition() {
         return position;
+    }
+
+    public void updatePosition(Position current, Position next) {
+        maze.updatePosition(current, next);
     }
 }

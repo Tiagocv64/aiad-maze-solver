@@ -16,6 +16,8 @@ import jade.domain.FIPAException;
 import jade.proto.ContractNetInitiator;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
 
 public class BaseAgent extends Agent{
 
@@ -136,6 +138,8 @@ public class BaseAgent extends Agent{
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
+            System.out.println(Arrays.toString(toVisit.toArray()));
+
             Position next = null;
             if (possibleMoves[Maze.SOUTH]){
                 next = new Position(position.getX(), position.getY() + 1);
@@ -166,6 +170,7 @@ public class BaseAgent extends Agent{
                 System.out.println("DEAD END");
             }
 
+            mazeRunner.updatePosition(position, next);
             position = next;
             System.out.println("Next pos: " + position.getX() + " " + position.getY());
 
@@ -175,6 +180,11 @@ public class BaseAgent extends Agent{
 //            if (Math.random()*100 < 25){
 //                this.baseAgent.startContract();
 //            }
+            try {
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         public boolean done() {
             return n > 5;

@@ -5,6 +5,7 @@ import java.util.List;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Maze
 {
@@ -18,6 +19,7 @@ public class Maze
     private List<Color> colors = new ArrayList<>();
     private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
+    private ConcurrentHashMap<Position, Integer> agentPositions = new ConcurrentHashMap<Position, Integer>(); // Position => Agent Identifier (ou outra cena)
     private int doorsNumber;
     private int frame = 0;
 
@@ -49,6 +51,13 @@ public class Maze
             createPath();
 
         }
+    }
+
+    public void updatePosition(Position current, Position next) {
+        if (agentPositions.containsKey(current)) {
+            agentPositions.remove(current);
+        }
+        agentPositions.put(next, 1);
     }
 
     public class Cell // Class representing a cell in a maze.
@@ -326,7 +335,6 @@ public class Maze
             }
         }
 
-        int animationCounter = 0;
         g.setColor(Color.RED); // changes color to draw the dots
         for (int i = 0; i < N; i++)
         {
@@ -338,12 +346,24 @@ public class Maze
                     count += N;
                 }
 
+
+                if (agentPositions.containsKey(new Position(j, i))) {
+                    g.setColor(Color.RED);
+                    g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                            + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
+                }
+
                 if (path[count] == true) // if cell is part of the path
                 {
+
+
+
+                    /* animation test
                     if (animationCounter++ <= frame) {
                         g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                                 + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint path
                     }
+                    */
 
                     /* paiting doors
                     if (doors.containsKey(count) && animationCounter++ <= frame) {
@@ -364,7 +384,6 @@ public class Maze
                 g.setColor(Color.RED);
             }
         }
-        frame++;
     }
 
     public Dimension windowSize() // returns the ideal size of the window (for
