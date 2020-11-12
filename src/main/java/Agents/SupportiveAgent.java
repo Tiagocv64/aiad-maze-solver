@@ -30,13 +30,15 @@ public class SupportiveAgent extends BaseAgent{
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
             System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
-            int proposal = 4;
-            if (proposal > 2) {
-                // We provide a proposal
-                System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
+
+            // supportive agents always accepts if he's not already handling a request
+            if (!isHandlingRequest) {
+                // Agent calculates effort (distance between current position and button)
+                int effort = 4;
+                System.out.println("Agent "+getLocalName()+": Proposing "+effort);
                 ACLMessage propose = cfp.createReply();
                 propose.setPerformative(ACLMessage.PROPOSE);
-                propose.setContent(String.valueOf(proposal));
+                propose.setContent(String.valueOf(effort));
                 return propose;
             }
             else {
@@ -48,8 +50,9 @@ public class SupportiveAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
-            System.out.println("Agent "+getLocalName()+": Proposal accepted");
+            isHandlingRequest = true;
             if (true) { // do something
+                // set goal to button position
                 System.out.println("Agent "+getLocalName()+": Action successfully performed");
                 ACLMessage inform = accept.createReply();
                 inform.setPerformative(ACLMessage.INFORM);

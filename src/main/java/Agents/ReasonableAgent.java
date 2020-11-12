@@ -33,7 +33,10 @@ public class ReasonableAgent extends BaseAgent{
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
             System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
             int proposal = (int) (Math.random()*4);
-            if (proposal > 2) {
+            if (!isHandlingRequest) {
+                // este agente aceita pedidos mediante o esforço que já fez
+                // o esforço dos outros agentes e a distância a que se encontra do interruptor
+
                 // We provide a proposal
                 System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
                 ACLMessage propose = cfp.createReply();
@@ -50,6 +53,7 @@ public class ReasonableAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+            isHandlingRequest = true;
             System.out.println("Agent "+getLocalName()+": Proposal accepted");
             if (true) { // do something
                 System.out.println("Agent "+getLocalName()+": Action successfully performed");

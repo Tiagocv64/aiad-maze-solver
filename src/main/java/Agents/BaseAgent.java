@@ -26,6 +26,8 @@ public class BaseAgent extends Agent{
     Position position;
     Set<Position> visited = new HashSet<Position>();
     Stack<Position> toVisit = new Stack<Position>();
+    protected Boolean isHandlingRequest = false;
+    protected Integer effort = 0;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -138,8 +140,6 @@ public class BaseAgent extends Agent{
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
-            System.out.println(Arrays.toString(toVisit.toArray()));
-
             Position next = null;
             if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))){
                 next = new Position(position.getX(), position.getY() + 1);
@@ -163,7 +163,6 @@ public class BaseAgent extends Agent{
 
             mazeRunner.updatePosition(position, next);
             position = next;
-            System.out.println("Next pos: " + position.getX() + " " + position.getY());
 
 //            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
             visited.add(position);
@@ -215,6 +214,7 @@ public class BaseAgent extends Agent{
                 // Some responder didn't reply within the specified timeout
                 System.out.println("Timeout expired: missing "+(3 - responses.size())+" responses");
             }
+
             // Evaluate proposals.
             int bestProposal = -1;
             AID bestProposer = null;
