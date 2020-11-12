@@ -56,6 +56,15 @@ public class Maze implements Serializable
         }
     }
 
+    public Integer hasDoor(Position position) {
+        if (doors.containsKey(position.getX() + position.getY() * N)) {
+            return doors.get(position.getX() + position.getY() * N).getNumber();
+        }
+        else {
+            return -1;
+        }
+    }
+
     public void updatePosition(Position current, Position next, AgentInfo info) {
         if (agentPositions.containsKey(current)) {
             if (agentPositions.get(current).contains(info)) {
@@ -186,14 +195,14 @@ public class Maze implements Serializable
                 cells[current].isPath = true;
                 if (doorsNumber > 0 && distanceBetweenDoors > 15 && generator.nextInt(99) > 60) {
                     if (lastDoor != null) {
-                        Button button = createButton(current, 20);
+                        Button button = createButton(current, 20, doorsNumber);
                         button.setDoor(lastDoor);
                         lastDoor.setButton(button);
                         buttons.put(button.getCell(), button);
                     }
                     Color randomColor = colors.get(generator.nextInt(colors.size()));
                     colors.remove(randomColor);
-                    lastDoor = new Door(randomColor);
+                    lastDoor = new Door(randomColor, doorsNumber);
                     doors.put(current, lastDoor);
                     doorsNumber--;
                     distanceBetweenDoors = 0;
@@ -203,7 +212,7 @@ public class Maze implements Serializable
                 distanceBetweenDoors++;
             }
             if (lastDoor != null) {
-            Button button = createButton(current, 4);
+            Button button = createButton(current, 4, doorsNumber);
             button.setDoor(lastDoor);
             lastDoor.setButton(button);
             buttons.put(button.getCell(), button);
@@ -219,11 +228,11 @@ public class Maze implements Serializable
         // cell
     }
 
-    public Button createButton(int cell, int distance) {
+    public Button createButton(int cell, int distance, int number) {
         if (distance == 0) {
             if (cells[cell].isPath)
-                return createButton(cell, 1);
-            return new Button(cell);
+                return createButton(cell, 1, number);
+            return new Button(cell, number);
         }
 
         Cell startCell = cells[cell];
@@ -261,7 +270,7 @@ public class Maze implements Serializable
 
         currentCell = cells[adjacent];
 
-        return createButton(adjacent, distance - 1);
+        return createButton(adjacent, distance - 1, number);
     }
 
     public void depthSearch(int cell) // executes a first breath search to find
@@ -364,35 +373,25 @@ public class Maze implements Serializable
                 Position pos = new Position(i, j);
                 if (agentPositions.containsKey(pos)) {
                     g.setColor(agentPositions.get(pos).iterator().next().color);
-                    g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                    g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
                 }
 
                 if (path[count] == true) // if cell is part of the path
                 {
 
-
-
-                    /* animation test
-                    if (animationCounter++ <= frame) {
-                        g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
-                                + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint path
-                    }
-                    */
-
-                    /* paiting doors
-                    if (doors.containsKey(count) && animationCounter++ <= frame) {
+                    if (doors.containsKey(count)) {
                         g.setColor(doors.get(count).getColor());
 
-                        g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                        g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                               + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
                     }
-                    */
+
                 }
 
                 if (buttons.containsKey(count)) {
                     g.setColor(buttons.get(count).getDoor().getColor());
-                    g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                    g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE);
                 }
 

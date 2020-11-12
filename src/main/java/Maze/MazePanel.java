@@ -52,7 +52,7 @@ public class MazePanel extends JPanel implements Runnable
             repaint();
 
             timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = 500 - timeDiff;
+            sleep = 100 - timeDiff;
 
             if (sleep < 0) {
                 sleep = 2;

@@ -6,9 +6,11 @@ import java.io.Serializable;
 public class Door implements Serializable {
     private Button button;
     private Color color;
+    private int number;
 
-    public Door(Color color) {
+    public Door(Color color, int number) {
         this.color = color;
+        this.number = number;
     }
 
     public void setButton(Button button) {
@@ -21,5 +23,9 @@ public class Door implements Serializable {
 
     public Color getColor() {
         return color;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

@@ -30,6 +30,7 @@ public class BaseAgent extends Agent{
     Set<Position> visited = new HashSet<Position>();
     Stack<Position> toVisit = new Stack<Position>();
     Boolean isHandlingRequest = false;
+    Boolean isWaiting = false;
     AgentInfo info;
 
     protected void setup() {
@@ -84,7 +85,6 @@ public class BaseAgent extends Agent{
         template.addServices(sd1);
         try {
             DFAgentDescription[] result = DFService.search(this, template);
-            // envia mensagem "pong" inicial a todos os agentes "ping"
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             for (int i = 0; i < result.length; ++i)
                 msg.addReceiver(result[i].getName());
@@ -95,21 +95,20 @@ public class BaseAgent extends Agent{
         }
     }
 
-    private void sendMessageToAllAgents(String message){
+    private void sendMessageToAllAgents(AgentMessage message){
         // pesquisa DF por agentes "ping"
         DFAgentDescription template = new DFAgentDescription();
-        ServiceDescription sd1 = new ServiceDescription();
-        sd1.setType("Agente");
-        template.addServices(sd1);
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("Agent");
+        template.addServices(sd);
         try {
             DFAgentDescription[] result = DFService.search(this, template);
-            // envia mensagem "pong" inicial a todos os agentes "ping"
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             for (int i = 0; i < result.length; ++i)
                 msg.addReceiver(result[i].getName());
-            msg.setContent(message);
+            msg.setContentObject(message);
             send(msg);
-        } catch (FIPAException e) {
+        } catch (FIPAException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -120,7 +119,7 @@ public class BaseAgent extends Agent{
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setName(getName());
-        sd.setType("Agente");
+        sd.setType("Agent");
         dfd.addServices(sd);
         try {
             DFService.register(this, dfd);
@@ -138,7 +137,7 @@ public class BaseAgent extends Agent{
         }
 
         public void action() {
-            if (mazeRunner == null){ // waits for maze info
+            if (mazeRunner == null || isWaiting){ // waits for maze info
                 return;
             }
 
@@ -169,6 +168,16 @@ public class BaseAgent extends Agent{
 
             toVisit.push(next);
 
+            // verify if it is a door
+            // verify this by message later
+            int doorNumber = baseAgent.mazeRunner.hasDoor(next);
+            if (doorNumber != -1) { // has door
+                System.out.println("found door!!");
+                isWaiting = true;
+                sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {doorNumber}));
+                return;
+            }
+
             mazeRunner.updatePosition(position, next, info);
 
             sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
@@ -182,7 +191,7 @@ public class BaseAgent extends Agent{
 //                this.baseAgent.startContract();
 //            }
             try {
-                TimeUnit.MILLISECONDS.sleep(1000);
+                TimeUnit.MILLISECONDS.sleep(600);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
