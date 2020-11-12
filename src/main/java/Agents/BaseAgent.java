@@ -59,20 +59,29 @@ public class BaseAgent extends Agent{
         }
     }
 
-    public void startContract(){
+    public void startContract(AgentMessage message){
         // Fill the CFP message
         ACLMessage msg = new ACLMessage(ACLMessage.CFP);
 
         // TODO get all agents names
         String[] names = {"selfish0", "reasonable0", "supportive0"};
 
-        for (String name : names) {
-            msg.addReceiver(new AID(name, AID.ISLOCALNAME));
+        DFAgentDescription template = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("Agent");
+        template.addServices(sd);
+        try {
+            DFAgentDescription[] result = DFService.search(this, template);
+            for (int i = 0; i < result.length; ++i)
+                msg.addReceiver(result[i].getName());
+            msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
+            // We want to receive a reply in 10 secs
+            msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+            msg.setContentObject(message);
+        } catch (FIPAException | IOException e) {
+            e.printStackTrace();
         }
-        msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-        // We want to receive a reply in 10 secs
-        msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
-        msg.setContent("dummy-action");
+
 
         addBehaviour(new ContractInitiator(this, msg));
     }
@@ -174,7 +183,8 @@ public class BaseAgent extends Agent{
             if (doorNumber != -1) { // has door
                 System.out.println("found door!!");
                 isWaiting = true;
-                sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {doorNumber}));
+                // starts FIPA contract with all agents
+                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {doorNumber}));
                 return;
             }
 
@@ -220,9 +230,9 @@ public class BaseAgent extends Agent{
                     e.printStackTrace();
                 }
 
-                System.out.println(agentMessage.getSender());
-                System.out.println(agentMessage.getDescription());
-                System.out.println(agentMessage.getContent());
+                // System.out.println(agentMessage.getSender());
+                // System.out.println(agentMessage.getDescription());
+                // System.out.println(agentMessage.getContent());
 
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ANSWER_MAZE_INFO:
@@ -248,18 +258,20 @@ public class BaseAgent extends Agent{
 
         @Override
         protected void handleAllResponses(Vector responses, Vector acceptances) {
-            if (responses.size() < 3) {
+            /* if (responses.size() < 3) {
                 // Some responder didn't reply within the specified timeout
                 System.out.println("Timeout expired: missing "+(3 - responses.size())+" responses");
-            }
+            } */
 
             // Evaluate proposals.
+
             int bestProposal = -1;
             AID bestProposer = null;
             ACLMessage accept = null;
             Enumeration e = responses.elements();
             while (e.hasMoreElements()) {
                 ACLMessage msg = (ACLMessage) e.nextElement();
+                System.out.println("Proposal from: " + msg.getSender().getName());
                 if (msg.getPerformative() == ACLMessage.PROPOSE) {
                     ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.REJECT_PROPOSAL);

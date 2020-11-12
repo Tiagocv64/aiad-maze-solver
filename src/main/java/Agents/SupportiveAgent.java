@@ -29,7 +29,7 @@ public class SupportiveAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
-            System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
+            // System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 
             // supportive agents always accepts if he's not already handling a request
             if (!isHandlingRequest) {

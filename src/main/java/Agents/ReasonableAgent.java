@@ -31,7 +31,7 @@ public class ReasonableAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
-            System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
+            // System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
             int proposal = (int) (Math.random()*4);
             if (!isHandlingRequest) {
                 // este agente aceita pedidos mediante o esforço que já fez
