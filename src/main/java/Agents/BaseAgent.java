@@ -13,8 +13,10 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -28,12 +30,13 @@ public class BaseAgent extends Agent{
     Stack<Position> toVisit = new Stack<Position>();
     protected Boolean isHandlingRequest = false;
     protected Integer effort = 0;
+    Maze.Cell[] cellsMaze = null;
 
     protected void setup() {
         Object[] args = getArguments();
         this.mazeRunner = (MazeRunner) args[0];
         this.position = this.mazeRunner.getPosition();
-        this.previousPosition= new Position(-1 , -1);
+        this.previousPosition = new Position(-1 , -1);
         this.toVisit.push(this.position);
 
         registerAgentToDF();
@@ -41,7 +44,7 @@ public class BaseAgent extends Agent{
         addBehaviour(new SearchingBehaviour(this));
         addBehaviour(new ListeningBehaviour(this));
 
-        sendMessageToMaze("OLA");
+        sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
 //        sendMessageToAllAgents("OLA");
     }
 
@@ -73,7 +76,7 @@ public class BaseAgent extends Agent{
         addBehaviour(new ContractInitiator(this, msg));
     }
 
-    private void sendMessageToMaze(String message){
+    private void sendMessageToMaze(AgentMessage message){
         // pesquisa DF por agentes "ping"
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd1 = new ServiceDescription();
@@ -85,9 +88,9 @@ public class BaseAgent extends Agent{
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             for (int i = 0; i < result.length; ++i)
                 msg.addReceiver(result[i].getName());
-            msg.setContent(message);
+            msg.setContentObject(message);
             send(msg);
-        } catch (FIPAException e) {
+        } catch (FIPAException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -135,7 +138,14 @@ public class BaseAgent extends Agent{
         }
 
         public void action() {
-            System.out.println(++n + " I am doing something!");
+
+            if (cellsMaze != null){
+                System.out.println("CELLS MAZE GOOD");
+            } else {
+                System.out.println("CELLS MAZE BAD");
+                return;
+            }
+//            System.out.println(++n + " I am doing something!");
             System.out.println("Current pos: " + baseAgent.position.getX() + " " + baseAgent.position.getY());
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
@@ -193,8 +203,27 @@ public class BaseAgent extends Agent{
 
             ACLMessage msg = receive();
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-                System.out.println(getLocalName() +
-                        ": recebi " + msg.getContent());
+//                System.out.println(getLocalName() +
+//                        ": recebi " + msg.getContent());
+                AgentMessage agentMessage = null;
+                try {
+                    agentMessage = (AgentMessage) msg.getContentObject();
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(agentMessage.getSender());
+                System.out.println(agentMessage.getDescription());
+                System.out.println(agentMessage.getContent());
+
+                switch (agentMessage.getDescription()){
+                    case AgentMessage.ANSWER_MAZE_INFO:
+
+                        cellsMaze = (Maze.Cell[]) agentMessage.getContent();
+
+                        break;
+                    default:
+                }
             }
         }
 

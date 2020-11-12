@@ -1,5 +1,6 @@
 package Maze;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 import java.awt.Color;
@@ -60,7 +61,7 @@ public class Maze
         agentPositions.put(next, 1);
     }
 
-    public class Cell // Class representing a cell in a maze.
+    public static class Cell implements Serializable // Class representing a cell in a maze.
     {
         int[] walls; // array representing north, south, east, west walls
         int visitedBy; // for running first breath search, saves the cell that visited this cell

@@ -9,9 +9,11 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class MazeAgent extends Agent {
 
@@ -78,13 +80,35 @@ public class MazeAgent extends Agent {
 
             ACLMessage msg = receive();
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-                System.out.println(getLocalName() +
-                        ": recebi " + msg.getContent());
+//                System.out.println(getLocalName() +
+//                        ": recebi " + msg.getContent());
+                AgentMessage agentMessage = null;
+                try {
+                    agentMessage = (AgentMessage) msg.getContentObject();
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
 
-                ACLMessage reply = msg.createReply();
-                reply.setPerformative(ACLMessage.INFORM);
-                reply.setContent("RESPONSE FROM MAZE");
-                send(reply);
+                System.out.println(agentMessage.getSender());
+                System.out.println(agentMessage.getDescription());
+                System.out.println(agentMessage.getContent());
+
+                switch (agentMessage.getDescription()){
+                    case AgentMessage.ASK_MAZE_INFO:
+
+                        try {
+                            ACLMessage reply = msg.createReply();
+                            reply.setPerformative(ACLMessage.INFORM);
+                            reply.setContentObject(new AgentMessage(getAID(), AgentMessage.ANSWER_MAZE_INFO,
+                                        maze.cells));
+                            send(reply);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    default:
+                }
             }
         }
 
