@@ -1,5 +1,7 @@
 package Maze;
 
+import Agents.AgentInfo;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.List;
@@ -20,7 +22,7 @@ public class Maze implements Serializable
     private List<Color> colors = new ArrayList<>();
     private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
-    private ConcurrentHashMap<Position, Integer> agentPositions = new ConcurrentHashMap<Position, Integer>(); // Position => Agent Identifier (ou outra cena)
+    private HashMap<Position, Set<AgentInfo>> agentPositions = new HashMap<Position, Set<AgentInfo>>();
     private int doorsNumber;
     private int frame = 0;
 
@@ -54,11 +56,23 @@ public class Maze implements Serializable
         }
     }
 
-    public void updatePosition(Position current, Position next) {
+    public void updatePosition(Position current, Position next, AgentInfo info) {
         if (agentPositions.containsKey(current)) {
-            agentPositions.remove(current);
+            if (agentPositions.get(current).contains(info)) {
+                agentPositions.get(current).remove(info);
+
+                if (agentPositions.get(current).size() == 0) {
+                    agentPositions.remove(current);
+                }
+            }
         }
-        agentPositions.put(next, 1);
+
+        if (!agentPositions.containsKey(next)) {
+            agentPositions.put(next, new HashSet<>());
+        }
+
+        agentPositions.get(next).add(info);
+
     }
 
     public static class Cell implements Serializable // Class representing a cell in a maze.
@@ -347,9 +361,9 @@ public class Maze implements Serializable
                     count += N;
                 }
 
-
-                if (agentPositions.containsKey(new Position(i, j))) {
-                    g.setColor(Color.RED);
+                Position pos = new Position(i, j);
+                if (agentPositions.containsKey(pos)) {
+                    g.setColor(agentPositions.get(pos).iterator().next().color);
                     g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
                 }

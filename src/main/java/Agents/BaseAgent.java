@@ -16,6 +16,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -28,13 +29,15 @@ public class BaseAgent extends Agent{
     Position position;
     Set<Position> visited = new HashSet<Position>();
     Stack<Position> toVisit = new Stack<Position>();
-    protected Boolean isHandlingRequest = false;
-    protected Integer effort = 0;
+    Boolean isHandlingRequest = false;
+    AgentInfo info;
 
     protected void setup() {
+        Object[] args = getArguments();
         this.position = new Position(0 , 0);
         this.previousPosition = new Position(-1 , -1);
         this.toVisit.push(this.position);
+        this.info = new AgentInfo((Color) args[0]);
 
         registerAgentToDF();
 
@@ -135,13 +138,10 @@ public class BaseAgent extends Agent{
         }
 
         public void action() {
-
-            if (mazeRunner != null){
-                System.out.println("CELLS MAZE GOOD");
-            } else {
-                System.out.println("CELLS MAZE BAD");
+            if (mazeRunner == null){ // waits for maze info
                 return;
             }
+
             n++;
             System.out.println("Current pos: " + baseAgent.position.getX() + " " + baseAgent.position.getY());
             previousPosition = position;
@@ -169,9 +169,9 @@ public class BaseAgent extends Agent{
 
             toVisit.push(next);
 
-            mazeRunner.updatePosition(position, next);
+            mazeRunner.updatePosition(position, next, info);
 
-            sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Position[] {position, next}));
+            sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
 
             position = next;
 

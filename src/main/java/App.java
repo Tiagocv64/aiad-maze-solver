@@ -1,8 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
 
 import Agents.*;
 import Maze.*;
@@ -45,19 +45,39 @@ public class App {
         AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors});
         mazeAgent.start();
 
+        List<Color> colors = new ArrayList<>();
+        colors.add(Color.LIGHT_GRAY);
+        colors.add(Color.MAGENTA);
+        colors.add(Color.CYAN);
+        colors.add(Color.BLUE);
+        colors.add(Color.ORANGE);
+        colors.add(Color.PINK);
+        colors.add(Color.GRAY);
+        colors.add(Color.YELLOW);
+        colors.add(Color.GREEN);
+        colors.add(Color.RED);
+
+        Random generator = new Random();
+        Color randomColor;
         AgentController[] selfishAgents = new AgentController[selfishNumber];
         for (int i = 0; i < selfishNumber; i++) {
-            selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", null);
+            randomColor = colors.get(generator.nextInt(colors.size()));
+            colors.remove(randomColor);
+            selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", new Object[] {randomColor});
             selfishAgents[i].start();
         }
         AgentController[] reasonableAgents = new AgentController[reasonableNumber];
         for (int i = 0; i < reasonableNumber; i++) {
-            reasonableAgents[i] = container.createNewAgent("reasonable" + i, "Agents.ReasonableAgent", null);
+            randomColor = colors.get(generator.nextInt(colors.size()));
+            colors.remove(randomColor);
+            reasonableAgents[i] = container.createNewAgent("reasonable" + i, "Agents.ReasonableAgent", new Object[] {randomColor});
             reasonableAgents[i].start();
         }
         AgentController[] supportiveAgents = new AgentController[supportiveNumber];
         for (int i = 0; i < supportiveNumber; i++) {
-            supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", null);
+            randomColor = colors.get(generator.nextInt(colors.size()));
+            colors.remove(randomColor);
+            supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", new Object[] {randomColor});
             supportiveAgents[i].start();
         }
 

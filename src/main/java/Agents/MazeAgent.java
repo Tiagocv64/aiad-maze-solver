@@ -111,8 +111,11 @@ public class MazeAgent extends Agent {
                         break;
                     case AgentMessage.ASK_UPDATE_POS:
 
-                        Position[] positions = (Position[]) agentMessage.getContent();
-                        mazeRunner.updatePosition(positions[0], positions[1]);
+                        Object[] contents = (Object[]) agentMessage.getContent();
+                        Position current = (Position) contents[0];
+                        Position next = (Position) contents[1];
+                        AgentInfo info = (AgentInfo) contents[2];
+                        mazeRunner.updatePosition(current, next, info);
 
                         break;
                     default:

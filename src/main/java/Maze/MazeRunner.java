@@ -1,6 +1,8 @@
 package Maze;
 
 
+import Agents.AgentInfo;
+
 import java.io.Serializable;
 
 public class MazeRunner implements Serializable {
@@ -28,7 +30,7 @@ public class MazeRunner implements Serializable {
         return position;
     }
 
-    public void updatePosition(Position current, Position next) {
-        maze.updatePosition(current, next);
+    public void updatePosition(Position current, Position next, AgentInfo info) {
+        maze.updatePosition(current, next, info);
     }
 }
