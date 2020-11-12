@@ -3,9 +3,8 @@ import java.awt.*;
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import Agents.ReasonableAgent;
-import Agents.SelfishAgent;
-import Agents.SupportiveAgent;
+
+import Agents.*;
 import Maze.*;
 import Agents.SelfishAgent;
 import jade.core.Agent;
@@ -46,6 +45,9 @@ public class App {
         p.setParameter(Profile.GUI, "true");
         AgentContainer container = rt.createMainContainer(p);
 
+        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {size, doors});
+        mazeAgent.start();
+
         AgentController[] selfishAgents = new AgentController[selfishNumber];
         for (int i = 0; i < selfishNumber; i++) {
             selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", new Object[] {mazeRunner});
@@ -61,15 +63,6 @@ public class App {
             supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", new Object[] {mazeRunner});
             supportiveAgents[i].start();
         }
-
-        JFrame frame = new JFrame("Maze");
-        MazePanel panel = new MazePanel(maze); // Constructs the panel to hold the maze
-        JScrollPane scrollPane = new JScrollPane(panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(maze.windowSize());
-        frame.pack();
-        frame.add(scrollPane, BorderLayout.CENTER);
-        frame.setVisible(true);
 
     }
     private static int rangeCheck(String question, Scanner input, int min, int max) {

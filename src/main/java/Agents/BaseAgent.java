@@ -37,7 +37,8 @@ public class BaseAgent extends Agent{
         addBehaviour(new SearchingBehaviour(this));
         addBehaviour(new ListeningBehaviour(this));
 
-        sendMessageToAllAgents("OLA");
+        sendMessageToMaze("OLA");
+//        sendMessageToAllAgents("OLA");
     }
 
     @Override
@@ -66,6 +67,25 @@ public class BaseAgent extends Agent{
         msg.setContent("dummy-action");
 
         addBehaviour(new ContractInitiator(this, msg));
+    }
+
+    private void sendMessageToMaze(String message){
+        // pesquisa DF por agentes "ping"
+        DFAgentDescription template = new DFAgentDescription();
+        ServiceDescription sd1 = new ServiceDescription();
+        sd1.setType("Maze");
+        template.addServices(sd1);
+        try {
+            DFAgentDescription[] result = DFService.search(this, template);
+            // envia mensagem "pong" inicial a todos os agentes "ping"
+            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            for (int i = 0; i < result.length; ++i)
+                msg.addReceiver(result[i].getName());
+            msg.setContent(message);
+            send(msg);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendMessageToAllAgents(String message){
@@ -149,12 +169,12 @@ public class BaseAgent extends Agent{
             position = next;
             System.out.println("Next pos: " + position.getX() + " " + position.getY());
 
-            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
+//            sendMessageToAllAgents(getLocalName() + ": " + baseAgent.position.getX() + " " + baseAgent.position.getY());
             visited.add(position);
 
-            if (Math.random()*100 < 25){
-                this.baseAgent.startContract();
-            }
+//            if (Math.random()*100 < 25){
+//                this.baseAgent.startContract();
+//            }
         }
         public boolean done() {
             return n > 5;
@@ -162,7 +182,6 @@ public class BaseAgent extends Agent{
     }
 
     class ListeningBehaviour extends Behaviour {
-        private int n = 0;
         private BaseAgent baseAgent;
 
         ListeningBehaviour(BaseAgent baseAgent){
@@ -171,7 +190,6 @@ public class BaseAgent extends Agent{
 
         public void action() {
 
-            n++;
             ACLMessage msg = receive();
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
                 System.out.println(getLocalName() +
@@ -180,7 +198,7 @@ public class BaseAgent extends Agent{
         }
 
         public boolean done() {
-            return n > 10;
+            return false;
         }
     }
 
