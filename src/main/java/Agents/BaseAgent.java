@@ -320,10 +320,10 @@ public class BaseAgent extends Agent{
 
         @Override
         protected void handleAllResponses(Vector responses, Vector acceptances) {
-            /* if (responses.size() < 3) {
-                // Some responder didn't reply within the specified timeout
-                System.out.println("Timeout expired: missing "+(3 - responses.size())+" responses");
-            } */
+            if (responses.size() < 1) {
+                // Nobody replied r within the specified timeout
+                System.out.println("Timeout expired: 0 responses");
+            }
 
             // Evaluate proposals.
 

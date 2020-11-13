@@ -10,7 +10,6 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
 
-import java.io.IOException;
 
 public class SupportiveAgent extends BaseAgent{
 
@@ -51,6 +50,7 @@ public class SupportiveAgent extends BaseAgent{
                 ACLMessage propose = cfp.createReply();
                 propose.setPerformative(ACLMessage.PROPOSE);
                 propose.setContent(String.valueOf(effort));
+                System.out.println("all good");
                 return propose;
             }
             else {
