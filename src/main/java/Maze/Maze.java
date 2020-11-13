@@ -53,12 +53,12 @@ public class Maze implements Serializable
         }
     }
 
-    public Integer hasDoor(Position position) {
+    public Door hasDoor(Position position) {
         if (doors.containsKey(position.getX() + position.getY() * N)) {
-            return doors.get(position.getX() + position.getY() * N).getNumber();
+            return doors.get(position.getX() + position.getY() * N);
         }
         else {
-            return -1;
+            return null;
         }
     }
 

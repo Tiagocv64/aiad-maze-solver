@@ -4,6 +4,8 @@ import Maze.Maze;
 import Maze.MazePanel;
 import Maze.MazeRunner;
 import Maze.Position;
+import Maze.Button;
+import Maze.Door;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -16,6 +18,7 @@ import jade.lang.acl.UnreadableException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.TimerTask;
 
 public class MazeAgent extends Agent {
 
@@ -117,6 +120,24 @@ public class MazeAgent extends Agent {
                         AgentInfo info = (AgentInfo) contents[2];
                         mazeRunner.updatePosition(current, next, info);
 
+                        break;
+                    case AgentMessage.OPEN_DOOR:
+                        Position buttonPosition = (Position) ((Object[]) agentMessage.getContent())[0];
+                        Button button = maze.hasButton(buttonPosition);
+                        if (button != null) {
+                            button.getDoor().openDoor();
+                            // door stays open for 2 seconds
+                            new java.util.Timer().schedule(
+                                    new java.util.TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            button.getDoor().closeDoor();
+                                        }
+                                    },
+                                    2000
+                            );
+
+                        }
                         break;
                     default:
                 }

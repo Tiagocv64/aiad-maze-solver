@@ -2,6 +2,7 @@ package Agents;
 
 import Maze.Maze;
 import Maze.Button;
+import Maze.Door;
 import Maze.MazeRunner;
 import Maze.Position;
 import jade.core.AID;
@@ -240,12 +241,12 @@ public class BaseAgent extends Agent{
 
             // verify if it is a door
             // verify this by message later
-            int doorNumber = baseAgent.mazeRunner.hasDoor(next);
-            if (doorNumber != -1) { // has door
+            Door door = baseAgent.mazeRunner.hasDoor(next);
+            if (door != null && !door.isOpen()) { // has door and its closed
                 System.out.println("found door!!");
                 isWaiting = true;
                 // starts FIPA contract with all agents
-                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {doorNumber}));
+                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getNumber()}));
                 return;
             }
 
@@ -265,7 +266,36 @@ public class BaseAgent extends Agent{
         }
 
         public void searchButton() {
-
+            if (pathToButton != null) {
+                Integer direction = pathToButton.get(0);
+                pathToButton.remove(0);
+                Position next = null;
+                switch (direction) {
+                    case Maze.SOUTH:
+                        next = new Position(position.getX(), position.getY() + 1);
+                        break;
+                    case Maze.EAST:
+                        next = new Position(position.getX() + 1, position.getY());
+                        break;
+                    case Maze.NORTH:
+                        next = new Position(position.getX(), position.getY() - 1);
+                        break;
+                    case Maze.WEST:
+                        next = new Position(position.getX() - 1, position.getY());
+                        break;
+                }
+                if (next != null) {
+                    mazeRunner.updatePosition(position, next, info);
+                    sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
+                    sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
+                }
+                if (pathToButton.size() == 0) {
+                    pathToButton = null;
+                    sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, new Object[] {position}));
+                    isHandlingRequest = false;
+                    buttonToFind = -1;
+                }
+            }
         }
 
         public void action() {
