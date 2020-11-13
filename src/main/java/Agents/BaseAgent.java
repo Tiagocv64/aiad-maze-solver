@@ -244,6 +244,7 @@ public class BaseAgent extends Agent{
             Door door = baseAgent.mazeRunner.hasDoor(next);
             if (door != null && !door.isOpen()) { // has door and its closed
                 System.out.println("found door!!");
+
                 isWaiting = true;
                 // starts FIPA contract with all agents
                 this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getNumber()}));

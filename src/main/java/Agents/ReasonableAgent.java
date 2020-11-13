@@ -7,7 +7,10 @@ import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
+
+import java.io.IOException;
 
 public class ReasonableAgent extends BaseAgent{
 
@@ -31,34 +34,47 @@ public class ReasonableAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
-            // System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
-            int proposal = (int) (Math.random()*4);
-            if (!isHandlingRequest) {
-                // este agente aceita pedidos mediante o esforço que já fez
-                // o esforço dos outros agentes e a distância a que se encontra do interruptor
+            System.out.println("Received cfp " + getLocalName());
 
-                // We provide a proposal
-                System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
-                ACLMessage propose = cfp.createReply();
-                propose.setPerformative(ACLMessage.PROPOSE);
-                propose.setContent(String.valueOf(proposal));
-                return propose;
+            if (!isHandlingRequest) {
+                // Agent calculates distance between current position and button
+                int distance = 0;
+                try {
+                    AgentMessage agentMessage = (AgentMessage) cfp.getContentObject();
+                    buttonToFind = (Integer) ((Object[]) agentMessage.getContent())[0];
+                    System.out.println("Agent "+getLocalName()+": Proposing "+effort + " to " + cfp.getSender().getLocalName());
+                    ACLMessage propose = cfp.createReply();
+                    propose.setPerformative(ACLMessage.PROPOSE);
+                    propose.setContentObject(new AgentMessage(getAID(), AgentMessage.PROPOSE, new Object[] {effort}));
+                    return propose;
+                } catch (UnreadableException | IOException e) {
+                    e.printStackTrace();
+                }
+
             }
             else {
                 // We refuse to provide a proposal
-                System.out.println("Agent "+getLocalName()+": Refuse");
                 throw new RefuseException("evaluation-failed");
             }
+
+            return null;
         }
 
         @Override
         protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+            System.out.println("Received accept proposal");
             isHandlingRequest = true;
-            System.out.println("Agent "+getLocalName()+": Proposal accepted");
             if (true) { // do something
-                System.out.println("Agent "+getLocalName()+": Action successfully performed");
+                // set goal to button position
+                System.out.println("Agent: " + getLocalName() + ": Looking for button");
                 ACLMessage inform = accept.createReply();
                 inform.setPerformative(ACLMessage.INFORM);
+                try {
+                    inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
+                    pathToButton = agentMazeInfo.getPathToButton(position, buttonToFind);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return inform;
             }
             else {

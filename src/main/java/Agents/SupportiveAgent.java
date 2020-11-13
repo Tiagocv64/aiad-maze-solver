@@ -34,22 +34,18 @@ public class SupportiveAgent extends BaseAgent{
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
             System.out.println("Received cfp " + getLocalName());
-            // System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 
             // supportive agents always accepts if he's not already handling a request
-            // unless he is answering himself
-            // if (!isHandlingRequest && !getLocalName().equals(cfp.getSender().getLocalName())) {
-            if (true) {
-                // Agent calculates effort (distance between current position and button)
-                int effort = 4;
+            if (!isHandlingRequest) {
+                // Agent calculates distance between current position and button
+                int distance = 0;
                 try {
                     AgentMessage agentMessage = (AgentMessage) cfp.getContentObject();
                     buttonToFind = (Integer) ((Object[]) agentMessage.getContent())[0];
-                    System.out.println("Agent "+getLocalName()+": Proposing "+effort + " to " + cfp.getSender().getLocalName());
+                    System.out.println("Agent "+getLocalName()+": Proposing "+ effort + " to " + cfp.getSender().getLocalName());
                     ACLMessage propose = cfp.createReply();
                     propose.setPerformative(ACLMessage.PROPOSE);
                     propose.setContentObject(new AgentMessage(getAID(), AgentMessage.PROPOSE, new Object[] {effort}));
-                    System.out.println("all good");
                     return propose;
                 } catch (UnreadableException | IOException e) {
                     e.printStackTrace();
