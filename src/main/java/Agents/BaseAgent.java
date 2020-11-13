@@ -13,6 +13,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
@@ -100,7 +101,6 @@ public class BaseAgent extends Agent{
         }
 
 
-        removeBehaviour(listeningBehaviour);
         addBehaviour(new ContractInitiator(this, msg));
     }
 
@@ -169,29 +169,20 @@ public class BaseAgent extends Agent{
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
-            /* TODO use this later
-            Position next = null;
-            if (possibleMoves[Maze.SOUTH] && position.getY() + 1 < mazeRunner.maze.N &&
-                    baseAgent.agentMazeInfo.cellsInfo[position.getX()][position.getY() + 1].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
-                    !visited.contains(new Position(position.getX(), position.getY() + 1))){
-                next = new Position(position.getX(), position.getY() + 1);
-            }
-            else if (possibleMoves[Maze.EAST] &&position.getX() + 1 < mazeRunner.maze.N &&
-                    baseAgent.agentMazeInfo.cellsInfo[position.getX() + 1][position.getY()].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
-                    !visited.contains(new Position(position.getX() + 1, position.getY()))) {
-                next = new Position(position.getX() + 1, position.getY());
-            }
-            else if (possibleMoves[Maze.NORTH] && position.getY() - 1 >= 0 &&
-                    baseAgent.agentMazeInfo.cellsInfo[position.getX()][position.getY() - 1].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
-                    !visited.contains(new Position(position.getX(), position.getY() - 1))) {
-                next = new Position(position.getX(), position.getY() - 1);
-            }
-            else if (possibleMoves[Maze.WEST] && position.getX() - 1 >= 0 &&
-                    baseAgent.agentMazeInfo.cellsInfo[position.getX() - 1][position.getY()].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
-                    !visited.contains(new Position(position.getX() - 1, position.getY()))){
-                next = new Position(position.getX() - 1, position.getY());
-            }
-            */
+            List<Integer> possibleMovesUnexplored = new ArrayList<Integer>();
+
+            if (possibleMoves[Maze.SOUTH] &&
+                    baseAgent.agentMazeInfo.getInfoCell(position.getX(), position.getY() + 1) == AgentMazeInfo.CellInfo.NO_INFORMATION)
+                possibleMovesUnexplored.add(Maze.SOUTH);
+            if (possibleMoves[Maze.EAST] &&
+                    baseAgent.agentMazeInfo.getInfoCell(position.getX() + 1, position.getY()) == AgentMazeInfo.CellInfo.NO_INFORMATION)
+                possibleMovesUnexplored.add(Maze.EAST);
+            if (possibleMoves[Maze.NORTH] &&
+                    baseAgent.agentMazeInfo.getInfoCell(position.getX(), position.getY() - 1) == AgentMazeInfo.CellInfo.NO_INFORMATION)
+                possibleMovesUnexplored.add(Maze.NORTH);
+            if (possibleMoves[Maze.WEST] &&
+                    baseAgent.agentMazeInfo.getInfoCell(position.getX() - 1, position.getY()) == AgentMazeInfo.CellInfo.NO_INFORMATION)
+                possibleMovesUnexplored.add(Maze.WEST);
 
             Position next = null;
 
@@ -211,25 +202,29 @@ public class BaseAgent extends Agent{
 
             for (int i = 0; i < 4; i++) {
                 if (randomDirections[i] == Maze.SOUTH) {
-                    if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))) {
+                    if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1)) &&
+                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.SOUTH))) {
                         next = new Position(position.getX(), position.getY() + 1);
                         break;
                     }
                 }
                 else if (randomDirections[i] == Maze.EAST) {
-                    if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY()))) {
+                    if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY())) &&
+                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.EAST))) {
                         next = new Position(position.getX() + 1, position.getY());
                         break;
                     }
                 }
                 else if (randomDirections[i] == Maze.NORTH) {
-                    if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1))) {
+                    if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1)) &&
+                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.NORTH))) {
                         next = new Position(position.getX(), position.getY() - 1);
                         break;
                     }
                 }
                 else if (randomDirections[i] == Maze.WEST) {
-                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))) {
+                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY())) &&
+                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.WEST))) {
                         next = new Position(position.getX() - 1, position.getY());
                         break;
                     }
@@ -307,23 +302,13 @@ public class BaseAgent extends Agent{
 
         public void action() {
 
-            ACLMessage msg = receive();
-            // TODO use this later
-            // while(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
-            AgentMessage agentMessage = null;
-            if(msg != null && msg.getPerformative() == ACLMessage.PROPOSE) {
-                try {
-                    agentMessage = (AgentMessage) msg.getContentObject();
-                } catch (UnreadableException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Received from: " + agentMessage.getSender());
-            }
+            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+            ACLMessage msg = receive(mt);
 
+            while(msg != null) {
 
-            if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
+                AgentMessage agentMessage = null;
 
-                agentMessage = null;
                 try {
                     agentMessage = (AgentMessage) msg.getContentObject();
                 } catch (UnreadableException e) {
@@ -334,7 +319,7 @@ public class BaseAgent extends Agent{
                 // System.out.println(agentMessage.getDescription());
                 // System.out.println(agentMessage.getContent());
 
-                switch (agentMessage.getDescription()){
+                switch (agentMessage.getDescription()) {
                     case AgentMessage.ANSWER_MAZE_INFO:
 
                         mazeRunner = (MazeRunner) agentMessage.getContent();
@@ -355,8 +340,8 @@ public class BaseAgent extends Agent{
                         // do nothing (just wait)
                     default:
                 }
-                // TODO use later
-//                msg = receive();
+
+                msg = receive(mt);
             }
         }
 
@@ -418,7 +403,6 @@ public class BaseAgent extends Agent{
                 acceptances.addElement(accept);
             }
 
-            addBehaviour(listeningBehaviour);
         }
     }
 

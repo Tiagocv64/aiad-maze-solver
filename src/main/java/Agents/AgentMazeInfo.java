@@ -30,7 +30,14 @@ public class AgentMazeInfo {
     }
 
     public List<Integer> getPathToButton(Position position, Integer button) {
+        return null;
+    }
 
+    public int getInfoCell(int x, int y){
+        if (x < 0 || x >= N || y < 0 || y >= N)
+            return CellInfo.NO_INFORMATION;
+        else
+            return cellsInfo[x][y].getState();
     }
 
     public class CellInfo {
