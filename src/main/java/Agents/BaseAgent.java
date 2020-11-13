@@ -34,6 +34,7 @@ public class BaseAgent extends Agent{
     AgentInfo info;
     AgentMazeInfo agentMazeInfo;
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
+    ListeningBehaviour listeningBehaviour;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -44,7 +45,8 @@ public class BaseAgent extends Agent{
 
         registerAgentToDF();
 
-        addBehaviour(new ListeningBehaviour(this));
+        listeningBehaviour = new ListeningBehaviour(this);
+        addBehaviour(listeningBehaviour);
 
         sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
 
@@ -96,6 +98,7 @@ public class BaseAgent extends Agent{
         }
 
 
+        removeBehaviour(listeningBehaviour);
         addBehaviour(new ContractInitiator(this, msg));
     }
 
@@ -234,7 +237,6 @@ public class BaseAgent extends Agent{
             if (next == null) { // dead end
                 toVisit.pop();
                 next = toVisit.pop();
-                System.out.println("DEAD END");
             }
 
             toVisit.push(next);
@@ -302,9 +304,20 @@ public class BaseAgent extends Agent{
             ACLMessage msg = receive();
             // TODO use this later
             // while(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
+            AgentMessage agentMessage = null;
+            if(msg != null && msg.getPerformative() == ACLMessage.PROPOSE) {
+                try {
+                    agentMessage = (AgentMessage) msg.getContentObject();
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Received from: " + agentMessage.getSender());
+            }
+
+
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
 
-                AgentMessage agentMessage = null;
+                agentMessage = null;
                 try {
                     agentMessage = (AgentMessage) msg.getContentObject();
                 } catch (UnreadableException e) {
@@ -368,7 +381,14 @@ public class BaseAgent extends Agent{
                     ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
                     acceptances.addElement(reply);
-                    int proposal = Integer.parseInt(msg.getContent());
+                    int proposal = 0;
+                    try {
+                        AgentMessage agentMessage = (AgentMessage) msg.getContentObject();
+                        proposal = (Integer) ((Object[]) agentMessage.getContent())[0];
+                    } catch (UnreadableException e1) {
+                        e1.printStackTrace();
+                    }
+                    System.out.println("Proposal received: " + proposal);
                     if (proposal > bestProposal) {
                         bestProposal = proposal;
                         bestProposer = msg.getSender();
@@ -384,9 +404,10 @@ public class BaseAgent extends Agent{
             if (accept != null) {
                 System.out.println("Agent " + getLocalName() + ": Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
                 accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-
-
+                acceptances.addElement(accept);
             }
+
+            addBehaviour(listeningBehaviour);
         }
     }
 

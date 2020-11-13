@@ -10,6 +10,8 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
 
+import java.io.IOException;
+
 
 public class SupportiveAgent extends BaseAgent{
 
@@ -43,20 +45,23 @@ public class SupportiveAgent extends BaseAgent{
                 try {
                     AgentMessage agentMessage = (AgentMessage) cfp.getContentObject();
                     buttonToFind = (Integer) ((Object[]) agentMessage.getContent())[0];
-                } catch (UnreadableException e) {
+                    System.out.println("Agent "+getLocalName()+": Proposing "+effort + " to " + cfp.getSender().getLocalName());
+                    ACLMessage propose = cfp.createReply();
+                    propose.setPerformative(ACLMessage.PROPOSE);
+                    propose.setContentObject(new AgentMessage(getAID(), AgentMessage.PROPOSE, new Object[] {effort}));
+                    System.out.println("all good");
+                    return propose;
+                } catch (UnreadableException | IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Agent "+getLocalName()+": Proposing "+effort + " to " + cfp.getSender().getLocalName());
-                ACLMessage propose = cfp.createReply();
-                propose.setPerformative(ACLMessage.PROPOSE);
-                propose.setContent(String.valueOf(effort));
-                System.out.println("all good");
-                return propose;
+
             }
             else {
                 // We refuse to provide a proposal
                 throw new RefuseException("evaluation-failed");
             }
+
+            return null;
         }
 
         @Override
