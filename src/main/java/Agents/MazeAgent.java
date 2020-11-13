@@ -91,9 +91,9 @@ public class MazeAgent extends Agent {
                     e.printStackTrace();
                 }
 
-                System.out.println(agentMessage.getSender());
-                System.out.println(agentMessage.getDescription());
-                System.out.println(agentMessage.getContent());
+                // System.out.println(agentMessage.getSender());
+                // System.out.println(agentMessage.getDescription());
+                // System.out.println(agentMessage.getContent());
 
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ASK_MAZE_INFO:
