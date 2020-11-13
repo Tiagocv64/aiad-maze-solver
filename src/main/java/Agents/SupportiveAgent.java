@@ -75,6 +75,7 @@ public class SupportiveAgent extends BaseAgent{
                 inform.setPerformative(ACLMessage.INFORM);
                 try {
                     inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
+                    pathToButton = agentMazeInfo.getPathToButton(position, buttonToFind);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

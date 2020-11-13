@@ -1,8 +1,10 @@
 package Agents;
 
 import Maze.Button;
+import Maze.Position;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class AgentMazeInfo {
 
@@ -25,6 +27,10 @@ public class AgentMazeInfo {
         if (!buttons.containsKey(button.getNumber())) {
             buttons.put(button.getNumber(), button);
         }
+    }
+
+    public List<Integer> getPathToButton(Position position, Integer button) {
+        
     }
 
     public class CellInfo {
