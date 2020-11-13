@@ -39,6 +39,7 @@ public class BaseAgent extends Agent{
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
     List<Integer> pathToButton = null;
     ListeningBehaviour listeningBehaviour;
+    Position next = null;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -185,8 +186,6 @@ public class BaseAgent extends Agent{
                     baseAgent.agentMazeInfo.getInfoCell(position.getX() - 1, position.getY()) == AgentMazeInfo.CellInfo.NO_INFORMATION)
                 possibleMovesUnexplored.add(Maze.WEST);
 
-            Position next = null;
-
             List<Integer> directions = new ArrayList<>();
             directions.add(Maze.SOUTH);
             directions.add(Maze.EAST);
@@ -299,14 +298,19 @@ public class BaseAgent extends Agent{
         }
 
         public void action() {
-            if (mazeRunner == null || isWaiting){ // waits for maze info
+            if (mazeRunner == null){ // waits for maze info
                 return;
             }
 
-            // if
-            if (isHandlingRequest && buttonToFind != -1) {
+
+            if (isWaiting) {
+                if (baseAgent.mazeRunner.hasDoor(next).isOpen()) {
+                    searchGoal();
+                    isWaiting = false;
+                }
+            }
+            else if (isHandlingRequest && buttonToFind != -1) {
                 searchButton();
-//                return;
             } else {
                 searchGoal();
             }
