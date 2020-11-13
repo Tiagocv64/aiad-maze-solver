@@ -205,7 +205,6 @@ public class BaseAgent extends Agent{
             }
 
             for (int i = 0; i < 4; i++) {
-                System.out.println(i + ": " + randomDirections[i]);
                 if (randomDirections[i] == Maze.SOUTH) {
                     if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))) {
                         next = new Position(position.getX(), position.getY() + 1);
