@@ -70,9 +70,14 @@ public class SupportiveAgent extends BaseAgent{
             isHandlingRequest = true;
             if (true) { // do something
                 // set goal to button position
-                System.out.println("Agent "+getLocalName()+ ": Looking for button");
+                System.out.println("Agent: " + getLocalName() + ": Looking for button");
                 ACLMessage inform = accept.createReply();
                 inform.setPerformative(ACLMessage.INFORM);
+                try {
+                    inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return inform;
             }
             else {

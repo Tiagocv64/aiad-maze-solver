@@ -350,6 +350,8 @@ public class BaseAgent extends Agent{
                     case AgentMessage.INFORM_AGENTS_OF_BUTTON:
                         Button button = (Button) agentMessage.getContent();
                         baseAgent.agentMazeInfo.foundButton(button);
+                    case AgentMessage.LOOKING_FOR_BUTTON:
+                        // do nothing (just wait)
                     default:
                 }
                 // TODO use later

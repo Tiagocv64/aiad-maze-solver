@@ -13,6 +13,7 @@ public class AgentMessage implements Serializable {
     public static final String INFORM_AGENTS_OF_MOVE = "INFORM_AGENTS_OF_MOVE";
     public static final String INFORM_AGENTS_OF_BUTTON= "INFORM_AGENTS_OF_BUTTON";
     public static final String PROPOSE = "PROPOSE";
+    public static final String LOOKING_FOR_BUTTON = "LOOKING_FOR_BUTTON";
 
     private final AID sender;  // Who sent the message
     private final String description;  // What is in the message
