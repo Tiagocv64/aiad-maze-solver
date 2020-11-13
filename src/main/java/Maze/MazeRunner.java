@@ -6,7 +6,7 @@ import Agents.AgentInfo;
 import java.io.Serializable;
 
 public class MazeRunner implements Serializable {
-    Maze maze;
+    public Maze maze;
     private Position position;
 
     public MazeRunner(Maze maze){

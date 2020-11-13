@@ -32,6 +32,7 @@ public class BaseAgent extends Agent{
     Boolean isHandlingRequest = false;
     Boolean isWaiting = false;
     AgentInfo info;
+    AgentMazeInfo agentMazeInfo;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -42,10 +43,18 @@ public class BaseAgent extends Agent{
 
         registerAgentToDF();
 
-        addBehaviour(new SearchingBehaviour(this));
         addBehaviour(new ListeningBehaviour(this));
 
         sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
+
+        try {
+            Thread.sleep(new Random().nextInt(1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        addBehaviour(new SearchingBehaviour(this));
+
 //        sendMessageToAllAgents("OLA");
     }
 
@@ -155,6 +164,30 @@ public class BaseAgent extends Agent{
             previousPosition = position;
             boolean[] possibleMoves = baseAgent.mazeRunner.getPossibleMovesFromPosition(baseAgent.position.getY(), baseAgent.position.getX());
 
+            /* TODO use this later
+            Position next = null;
+            if (possibleMoves[Maze.SOUTH] && position.getY() + 1 < mazeRunner.maze.N &&
+                    baseAgent.agentMazeInfo.cellsInfo[position.getX()][position.getY() + 1].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
+                    !visited.contains(new Position(position.getX(), position.getY() + 1))){
+                next = new Position(position.getX(), position.getY() + 1);
+            }
+            else if (possibleMoves[Maze.EAST] &&position.getX() + 1 < mazeRunner.maze.N &&
+                    baseAgent.agentMazeInfo.cellsInfo[position.getX() + 1][position.getY()].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
+                    !visited.contains(new Position(position.getX() + 1, position.getY()))) {
+                next = new Position(position.getX() + 1, position.getY());
+            }
+            else if (possibleMoves[Maze.NORTH] && position.getY() - 1 >= 0 &&
+                    baseAgent.agentMazeInfo.cellsInfo[position.getX()][position.getY() - 1].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
+                    !visited.contains(new Position(position.getX(), position.getY() - 1))) {
+                next = new Position(position.getX(), position.getY() - 1);
+            }
+            else if (possibleMoves[Maze.WEST] && position.getX() - 1 >= 0 &&
+                    baseAgent.agentMazeInfo.cellsInfo[position.getX() - 1][position.getY()].getState() == AgentMazeInfo.CellInfo.NO_INFORMATION &&
+                    !visited.contains(new Position(position.getX() - 1, position.getY()))){
+                next = new Position(position.getX() - 1, position.getY());
+            }
+            */
+
             Position next = null;
             if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))){
                 next = new Position(position.getX(), position.getY() + 1);
@@ -191,6 +224,7 @@ public class BaseAgent extends Agent{
             mazeRunner.updatePosition(position, next, info);
 
             sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
+            sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
 
             position = next;
 
@@ -221,6 +255,8 @@ public class BaseAgent extends Agent{
         public void action() {
 
             ACLMessage msg = receive();
+            // TODO use this later
+            // while(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
             if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
 
                 AgentMessage agentMessage = null;
@@ -238,10 +274,20 @@ public class BaseAgent extends Agent{
                     case AgentMessage.ANSWER_MAZE_INFO:
 
                         mazeRunner = (MazeRunner) agentMessage.getContent();
+                        agentMazeInfo = new AgentMazeInfo(mazeRunner.maze.N);
+
+                        break;
+                    case AgentMessage.INFORM_AGENTS_OF_MOVE:
+
+                        System.out.println(agentMessage.getDescription());
+                        Position senderPosition = (Position) agentMessage.getContent();
+                        baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
 
                         break;
                     default:
                 }
+                // TODO use later
+//                msg = receive();
             }
         }
 
