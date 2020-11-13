@@ -1,23 +1,23 @@
 package Agents;
 
 import Maze.Maze;
-import Maze.Position;
 import Maze.MazeRunner;
+import Maze.Position;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -189,17 +189,47 @@ public class BaseAgent extends Agent{
             */
 
             Position next = null;
-            if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))){
-                next = new Position(position.getX(), position.getY() + 1);
+
+            List<Integer> directions = new ArrayList<>();
+            directions.add(Maze.SOUTH);
+            directions.add(Maze.EAST);
+            directions.add(Maze.NORTH);
+            directions.add(Maze.WEST);
+            Random generator = new Random();
+            int randomDirection;
+            int[] randomDirections = new int [4];
+            for (int i = 0; i < 4; i++) {
+                randomDirection = directions.get(generator.nextInt(directions.size()));
+                randomDirections[i] = randomDirection;
+                directions.remove((Integer)randomDirection);
             }
-            else if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY()))) {
-                next = new Position(position.getX() + 1, position.getY());
-            }
-            else if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1))) {
-                next = new Position(position.getX(), position.getY() - 1);
-            }
-            else if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))){
-                next = new Position(position.getX() - 1, position.getY());
+
+            for (int i = 0; i < 4; i++) {
+                System.out.println(i + ": " + randomDirections[i]);
+                if (randomDirections[i] == Maze.SOUTH) {
+                    if (possibleMoves[Maze.SOUTH] && !visited.contains(new Position(position.getX(), position.getY() + 1))) {
+                        next = new Position(position.getX(), position.getY() + 1);
+                        break;
+                    }
+                }
+                else if (randomDirections[i] == Maze.EAST) {
+                    if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY()))) {
+                        next = new Position(position.getX() + 1, position.getY());
+                        break;
+                    }
+                }
+                else if (randomDirections[i] == Maze.NORTH) {
+                    if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1))) {
+                        next = new Position(position.getX(), position.getY() - 1);
+                        break;
+                    }
+                }
+                else if (randomDirections[i] == Maze.WEST) {
+                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))) {
+                        next = new Position(position.getX() - 1, position.getY());
+                        break;
+                    }
+                }
             }
 
             if (next == null) { // dead end
