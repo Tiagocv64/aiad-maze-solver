@@ -37,7 +37,8 @@ public class SupportiveAgent extends BaseAgent{
 
             // supportive agents always accepts if he's not already handling a request
             // unless he is answering himself
-            if (!isHandlingRequest && !getLocalName().equals(cfp.getSender().getLocalName())) {
+            // if (!isHandlingRequest && !getLocalName().equals(cfp.getSender().getLocalName())) {
+            if (true) {
                 // Agent calculates effort (distance between current position and button)
                 int effort = 4;
                 try {
@@ -60,6 +61,7 @@ public class SupportiveAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+            System.out.println("Received accept proposal");
             isHandlingRequest = true;
             if (true) { // do something
                 // set goal to button position

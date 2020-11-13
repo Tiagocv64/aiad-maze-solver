@@ -82,8 +82,10 @@ public class BaseAgent extends Agent{
         try {
             DFAgentDescription[] result = DFService.search(this, template);
             for (int i = 0; i < result.length; ++i) {
-                msg.addReceiver(result[i].getName());
-                System.out.println("Receiver: " + result[i].getName());
+                if (!getLocalName().equals(result[i].getName().getLocalName())) {
+                    msg.addReceiver(result[i].getName());
+                    System.out.println("Receiver: " + result[i].getName().getLocalName());
+                }
             }
             msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
             // We want to receive a reply in 10 secs
@@ -325,14 +327,14 @@ public class BaseAgent extends Agent{
 
             // Evaluate proposals.
 
-            System.out.println("Agent " + getLocalName() + " handling proposals");
+            System.out.println("Agent " + getLocalName() + ": Handling proposals");
             int bestProposal = -1;
             AID bestProposer = null;
             ACLMessage accept = null;
             Enumeration e = responses.elements();
             while (e.hasMoreElements()) {
                 ACLMessage msg = (ACLMessage) e.nextElement();
-                System.out.println("Proposal from: " + msg.getSender().getName());
+                System.out.println("Agent " + getLocalName() + ": Proposal from: " + msg.getSender().getName());
                 if (msg.getPerformative() == ACLMessage.PROPOSE) {
                     ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
@@ -353,6 +355,7 @@ public class BaseAgent extends Agent{
             if (accept != null) {
                 System.out.println("Agent " + getLocalName() + ": Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
                 accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+
 
             }
         }
