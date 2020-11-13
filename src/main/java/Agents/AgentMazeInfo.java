@@ -30,7 +30,7 @@ public class AgentMazeInfo {
     }
 
     public List<Integer> getPathToButton(Position position, Integer button) {
-        
+
     }
 
     public class CellInfo {
