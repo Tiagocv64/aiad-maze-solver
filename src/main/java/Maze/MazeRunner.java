@@ -37,4 +37,9 @@ public class MazeRunner implements Serializable {
     public Integer hasDoor(Position position) {
         return maze.hasDoor(position);
     }
+
+    public Button hasButton(Position position) {
+        return maze.hasButton(position);
+    }
+
 }

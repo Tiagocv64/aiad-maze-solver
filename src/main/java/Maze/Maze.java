@@ -62,6 +62,15 @@ public class Maze implements Serializable
         }
     }
 
+    public Button hasButton(Position position) {
+        if (buttons.containsKey(position.getX() + position.getY() * N)) {
+            return buttons.get(position.getX() + position.getY() * N);
+        }
+        else {
+            return null;
+        }
+    }
+
     public void updatePosition(Position current, Position next, AgentInfo info) {
         if (agentPositions.containsKey(current)) {
             if (agentPositions.get(current).contains(info)) {
@@ -80,6 +89,8 @@ public class Maze implements Serializable
         agentPositions.get(next).add(info);
 
     }
+
+
 
     public static class Cell implements Serializable // Class representing a cell in a maze.
     {

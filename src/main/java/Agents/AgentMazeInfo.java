@@ -1,9 +1,14 @@
 package Agents;
 
+import Maze.Button;
+
+import java.util.HashMap;
+
 public class AgentMazeInfo {
 
     int N;
     CellInfo[][] cellsInfo;
+    private HashMap<Integer, Button> buttons = new HashMap<>();
 
 
     public AgentMazeInfo(int size){
@@ -13,6 +18,12 @@ public class AgentMazeInfo {
             for (int j = 0; j < N; j++){
                 cellsInfo[i][j] = new CellInfo(CellInfo.NO_INFORMATION);
             }
+        }
+    }
+
+    public void foundButton(Button button) {
+        if (!buttons.containsKey(button.getNumber())) {
+            buttons.put(button.getNumber(), button);
         }
     }
 

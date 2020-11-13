@@ -1,6 +1,7 @@
 package Agents;
 
 import Maze.Maze;
+import Maze.Button;
 import Maze.MazeRunner;
 import Maze.Position;
 import jade.core.AID;
@@ -256,6 +257,10 @@ public class BaseAgent extends Agent{
 
             sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
             sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
+            Button button = baseAgent.mazeRunner.hasButton(next);
+            if (button != null) {
+                sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_BUTTON, button));
+            }
 
             position = next;
 
@@ -342,6 +347,9 @@ public class BaseAgent extends Agent{
                         baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
 
                         break;
+                    case AgentMessage.INFORM_AGENTS_OF_BUTTON:
+                        Button button = (Button) agentMessage.getContent();
+                        baseAgent.agentMazeInfo.foundButton(button);
                     default:
                 }
                 // TODO use later
