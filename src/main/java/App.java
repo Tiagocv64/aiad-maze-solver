@@ -6,7 +6,6 @@ import java.util.List;
 
 import Agents.*;
 import Maze.*;
-import Agents.SelfishAgent;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -30,6 +29,10 @@ public class App {
             reasonableNumber = rangeCheck("Number of reasonable agents: ", input, 0, 10);
             supportiveNumber = rangeCheck("Number of supportive agents: ", input, 0, 10);
             int totalAgents = selfishNumber + reasonableNumber + supportiveNumber;
+            if (totalAgents > 20) {
+                System.out.println("Total number of agents (" + totalAgents + ") needs to be 20 or less");
+                continue;
+            }
             if (doors >= totalAgents) {
                 System.out.println("Total number of agents (" + totalAgents + ") needs to be bigger than the amount of doors in the maze (" + doors + ")");
                 continue;
@@ -46,16 +49,7 @@ public class App {
         mazeAgent.start();
 
         List<Color> colors = new ArrayList<>();
-        colors.add(Color.LIGHT_GRAY);
-        colors.add(Color.MAGENTA);
-        colors.add(Color.CYAN);
-        colors.add(Color.BLUE);
-        colors.add(Color.ORANGE);
-        colors.add(Color.PINK);
-        colors.add(Color.GRAY);
-        colors.add(Color.YELLOW);
-        colors.add(Color.GREEN);
-        colors.add(Color.RED);
+        refillColors(colors);
 
         Random generator = new Random();
         Color randomColor;
@@ -63,6 +57,8 @@ public class App {
         for (int i = 0; i < selfishNumber; i++) {
             randomColor = colors.get(generator.nextInt(colors.size()));
             colors.remove(randomColor);
+            if (colors.size() == 0)
+                refillColors(colors);
             selfishAgents[i] = container.createNewAgent("selfish" + i, "Agents.SelfishAgent", new Object[] {randomColor});
             selfishAgents[i].start();
         }
@@ -70,6 +66,8 @@ public class App {
         for (int i = 0; i < reasonableNumber; i++) {
             randomColor = colors.get(generator.nextInt(colors.size()));
             colors.remove(randomColor);
+            if (colors.size() == 0)
+                refillColors(colors);
             reasonableAgents[i] = container.createNewAgent("reasonable" + i, "Agents.ReasonableAgent", new Object[] {randomColor});
             reasonableAgents[i].start();
         }
@@ -77,6 +75,8 @@ public class App {
         for (int i = 0; i < supportiveNumber; i++) {
             randomColor = colors.get(generator.nextInt(colors.size()));
             colors.remove(randomColor);
+            if (colors.size() == 0)
+                refillColors(colors);
             supportiveAgents[i] = container.createNewAgent("supportive" + i, "Agents.SupportiveAgent", new Object[] {randomColor});
             supportiveAgents[i].start();
         }
@@ -102,5 +102,17 @@ public class App {
             acceptedNumber = true;
         }
         return number;
+    }
+    private static void refillColors(List<Color> colors) {
+        colors.add(Color.LIGHT_GRAY);
+        colors.add(Color.MAGENTA);
+        colors.add(Color.CYAN);
+        colors.add(Color.BLUE);
+        colors.add(Color.ORANGE);
+        colors.add(Color.PINK);
+        colors.add(Color.GRAY);
+        colors.add(Color.YELLOW);
+        colors.add(Color.GREEN);
+        colors.add(Color.RED);
     }
 }
