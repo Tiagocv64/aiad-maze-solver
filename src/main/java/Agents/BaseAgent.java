@@ -37,6 +37,7 @@ public class BaseAgent extends Agent{
     AgentInfo info;
     AgentMazeInfo agentMazeInfo;
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
+    Integer effort = 0;
     List<Integer> pathToButton = null;
     ListeningBehaviour listeningBehaviour;
     Position next = null;
@@ -259,9 +260,8 @@ public class BaseAgent extends Agent{
             }
 
             position = next;
-
             visited.add(position);
-
+            next = null;
         }
 
         public void searchButton() {
