@@ -276,7 +276,7 @@ public class BaseAgent extends Agent{
             // if
             if (isHandlingRequest && buttonToFind != -1) {
                 searchButton();
-                return;
+//                return;
             } else {
                 searchGoal();
             }
@@ -334,8 +334,11 @@ public class BaseAgent extends Agent{
 
                         break;
                     case AgentMessage.INFORM_AGENTS_OF_BUTTON:
+
                         Button button = (Button) agentMessage.getContent();
                         baseAgent.agentMazeInfo.foundButton(button);
+
+                        break;
                     case AgentMessage.LOOKING_FOR_BUTTON:
                         // do nothing (just wait)
                     default:

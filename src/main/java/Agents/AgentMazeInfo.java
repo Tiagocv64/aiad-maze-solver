@@ -29,8 +29,16 @@ public class AgentMazeInfo {
         }
     }
 
+
     public List<Integer> getPathToButton(Position position, Integer button) {
         return null;
+    }
+    
+    public Position getButtonPosition(int number){
+        if (!buttons.containsKey(number))
+            return null;
+        Button button = buttons.get(number);
+        return new Position(button.getCell() % N, button.getCell() / N);
     }
 
     public int getInfoCell(int x, int y){
