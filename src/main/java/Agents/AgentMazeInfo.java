@@ -27,6 +27,13 @@ public class AgentMazeInfo {
         }
     }
 
+    public int getInfoCell(int x, int y){
+        if (x < 0 || x >= N || y < 0 || y >= N)
+            return CellInfo.NO_INFORMATION;
+        else
+            return cellsInfo[x][y].getState();
+    }
+
     public class CellInfo {
         public static final int NO_INFORMATION = 0;
         public static final int EXPLORED = 1;
