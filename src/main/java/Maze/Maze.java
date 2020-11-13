@@ -2,13 +2,10 @@ package Maze;
 
 import Agents.AgentInfo;
 
+import java.awt.*;
 import java.io.Serializable;
-import java.util.*;
 import java.util.List;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 public class Maze implements Serializable
 {
@@ -223,7 +220,7 @@ public class Maze implements Serializable
             path[0] = true ;
         }
 
-        cells[0].walls[WEST] = N * N; // destroys west wall on top left cell
+        //cells[0].walls[WEST] = N * N; // destroys west wall on top left cell
         cells[N * N - 1].walls[EAST] = N * N; // destroys east wall on bottom right
         // cell
     }
