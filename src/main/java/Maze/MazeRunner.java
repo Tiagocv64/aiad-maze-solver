@@ -4,6 +4,8 @@ package Maze;
 import Agents.AgentInfo;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Stack;
 
 public class MazeRunner implements Serializable {
     public Maze maze;
@@ -23,6 +25,11 @@ public class MazeRunner implements Serializable {
 
     private Maze.Cell getCellFromPosition(int y, int x){
         return maze.cells[y*maze.N+x];
+    }
+
+    public Stack<Position> getPathBetween(Position p1, Position p2) {
+
+        return maze.getPath(p1.getX() + p1.getY()*maze.N, p2.getX() + p2.getY()*maze.N);
     }
 
 

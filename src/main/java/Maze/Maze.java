@@ -51,6 +51,15 @@ public class Maze implements Serializable
             createPath();
 
         }
+
+        resetCellsVisitors();
+    }
+
+    public void resetCellsVisitors()  {
+        for (int i = 0; i < N * N; i++) // initializes array with Cell objects
+        {
+            cells[i].visitedBy = -1;
+        }
     }
 
     public Door hasDoor(Position position) {
@@ -69,6 +78,10 @@ public class Maze implements Serializable
         else {
             return null;
         }
+    }
+
+    public Button getButton(Integer number) {
+        return buttons.get(number);
     }
 
     public void updatePosition(Position current, Position next, AgentInfo info) {
@@ -319,6 +332,63 @@ public class Maze implements Serializable
                 }
             }
         }
+    }
+
+    public Stack<Position> getPath(int cell, int goal) {
+        resetCellsVisitors();
+        System.out.println("goal: " + goal);
+        Stack<Position> toVisit = new Stack<Position>();
+        Cell current = search(cell, goal);
+        while (current.visitedBy != -1) {
+            toVisit.push(new Position(current.visitedBy % N, current.visitedBy / N));
+        }
+        return toVisit;
+    }
+
+    private Cell search(int cell, int goal) // executes a first breath search to find
+    // a path in the maze
+    {
+        System.out.println(cell);
+        Cell startCell = cells[cell]; // current cell being checked
+
+        for (int i = 0; i < 4; i++) // check if there is a path north, south,
+        // east, or west
+        {
+            int adjacent = -1;
+
+            if (startCell.walls[i] == N * N) // if there is no wall in north,
+            // south, east or west direction
+            {
+                if (i == NORTH)
+                {
+                    adjacent = cell - N;
+                }
+                if (i == SOUTH)
+                {
+                    adjacent = cell + N;
+                }
+                if (i == EAST)
+                {
+                    adjacent = cell + 1;
+                }
+                if (i == WEST)
+                {
+                    adjacent = cell - 1;
+                }
+
+                System.out.println("viseted by: " + cells[adjacent].visitedBy);
+                System.out.println("adjacent: " + adjacent);
+                if (cells[adjacent].visitedBy == -1)
+                {
+                    cells[adjacent].visitedBy = cell;
+                    if (adjacent == goal) {
+                        return cells[adjacent];
+                    }
+                    return search(adjacent, goal);
+                }
+            }
+        }
+        return null;
     }
 
     public void draw(Graphics g) // draws a maze and its solution

@@ -38,7 +38,7 @@ public class BaseAgent extends Agent{
     AgentMazeInfo agentMazeInfo;
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
     Integer effort = 0;
-    List<Integer> pathToButton = null;
+    Stack<Position> pathToButton = null;
     ListeningBehaviour listeningBehaviour;
     Position next = null;
 
@@ -247,7 +247,7 @@ public class BaseAgent extends Agent{
 
                 isWaiting = true;
                 // starts FIPA contract with all agents
-                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getNumber()}));
+                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
                 return;
             }
 
@@ -266,35 +266,20 @@ public class BaseAgent extends Agent{
         }
 
         public void searchButton() {
-            if (pathToButton != null) {
-                Integer direction = pathToButton.get(0);
-                pathToButton.remove(0);
-                Position next = null;
-                switch (direction) {
-                    case Maze.SOUTH:
-                        next = new Position(position.getX(), position.getY() + 1);
-                        break;
-                    case Maze.EAST:
-                        next = new Position(position.getX() + 1, position.getY());
-                        break;
-                    case Maze.NORTH:
-                        next = new Position(position.getX(), position.getY() - 1);
-                        break;
-                    case Maze.WEST:
-                        next = new Position(position.getX() - 1, position.getY());
-                        break;
-                }
+            if (pathToButton.size() > 0) {
+                Position next = pathToButton.pop();
+
                 if (next != null) {
                     mazeRunner.updatePosition(position, next, info);
                     sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
                 }
-                if (pathToButton.size() == 0) {
-                    pathToButton = null;
-                    sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, new Object[] {position}));
-                    isHandlingRequest = false;
-                    buttonToFind = -1;
-                }
+
+            } else {
+                pathToButton = null;
+                sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, new Object[] {position}));
+                isHandlingRequest = false;
+                buttonToFind = -1;
             }
         }
 

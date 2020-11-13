@@ -1,5 +1,7 @@
 package Agents;
 
+import Maze.Button;
+import Maze.Position;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -71,7 +73,8 @@ public class ReasonableAgent extends BaseAgent{
                 inform.setPerformative(ACLMessage.INFORM);
                 try {
                     inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
-                    pathToButton = agentMazeInfo.getPathToButton(position, buttonToFind);
+                    Button button = mazeRunner.maze.getButton(buttonToFind);
+                    pathToButton = mazeRunner.getPathBetween(position,  new Position(button.getCell() % mazeRunner.maze.N, button.getCell() / mazeRunner.maze.N));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
