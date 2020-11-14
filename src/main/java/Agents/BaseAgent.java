@@ -34,6 +34,7 @@ public class BaseAgent extends Agent{
     Stack<Position> toVisit = new Stack<Position>();
     Boolean isHandlingRequest = false;
     Boolean isWaiting = false;
+    Boolean standingOnButton = false;
     AgentInfo info;
     AgentMazeInfo agentMazeInfo;
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
@@ -96,8 +97,8 @@ public class BaseAgent extends Agent{
                 }
             }
             msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-            // We want to receive a reply in 10 secs
-            msg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+            // We want to receive a reply in 6 secs
+            msg.setReplyByDate(new Date(System.currentTimeMillis() + 6000));
             msg.setContentObject(message);
         } catch (FIPAException | IOException e) {
             e.printStackTrace();
@@ -282,6 +283,8 @@ public class BaseAgent extends Agent{
                 sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, new Object[] {position}));
                 isHandlingRequest = false;
                 buttonToFind = -1;
+                standingOnButton = true;
+                System.out.println("standing on button");
             }
 
             mazeRunner.updatePosition(position, next, info);
@@ -291,7 +294,8 @@ public class BaseAgent extends Agent{
             if (mazeRunner == null){ // waits for maze info
                 return;
             }
-
+            if (standingOnButton)
+                return;
 
             if (isWaiting) {
                 if (baseAgent.mazeRunner.hasDoor(next).isOpen()) {
