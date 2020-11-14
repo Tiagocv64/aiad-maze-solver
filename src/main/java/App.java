@@ -1,12 +1,10 @@
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Random;
+import java.util.InputMismatchException;
 
-import Agents.*;
-import Maze.*;
-import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -29,8 +27,13 @@ public class App {
             reasonableNumber = rangeCheck("Number of reasonable agents: ", input, 0, 10);
             supportiveNumber = rangeCheck("Number of supportive agents: ", input, 0, 10);
             int totalAgents = selfishNumber + reasonableNumber + supportiveNumber;
+            int doorOpeners = reasonableNumber + supportiveNumber;
             if (totalAgents > 20) {
                 System.out.println("Total number of agents (" + totalAgents + ") needs to be 20 or less");
+                continue;
+            }
+            if (doors > doorOpeners) {
+                System.out.println("Total number of reasonable + supportive agents (" + doorOpeners + ") needs to be bigger than the amount of doors in the maze (" + doors + ")");
                 continue;
             }
             if (doors >= totalAgents) {
