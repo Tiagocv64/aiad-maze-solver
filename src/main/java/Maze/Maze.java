@@ -101,7 +101,15 @@ public class Maze implements Serializable
 
     }
 
-
+    public void openDoor(int doorNumber) {
+        for (Map.Entry<Integer, Door> set : doors.entrySet()) {
+            Door door = set.getValue();
+            if (door.getNumber() == doorNumber) {
+                door.openDoor();
+                set.setValue(door);
+            }
+        }
+    }
 
     public static class Cell implements Serializable // Class representing a cell in a maze.
     {
@@ -475,10 +483,12 @@ public class Maze implements Serializable
                 {
 
                     if (doors.containsKey(count)) {
-                        g.setColor(doors.get(count).getColor());
+                        if (!doors.get(count).isOpen()) {
+                            g.setColor(doors.get(count).getColor());
 
-                        g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
-                              + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
+                            g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
+                                    + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
+                        }
                     }
 
                 }

@@ -122,23 +122,8 @@ public class MazeAgent extends Agent {
 
                         break;
                     case AgentMessage.OPEN_DOOR:
-                        Position buttonPosition = (Position) ((Object[]) agentMessage.getContent())[0];
-                        Button button = maze.hasButton(buttonPosition);
-                        if (button != null) {
-                            button.getDoor().openDoor();
-                            System.out.println("Opening door: " + button.getDoor());
-                            // door stays open for 2 seconds
-                            /* new java.util.Timer().schedule(
-                                    new java.util.TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            button.getDoor().closeDoor();
-                                        }
-                                    },
-                                    2000
-                            ); */
-
-                        }
+                        Integer doorNumber = (Integer) agentMessage.getContent();
+                        maze.openDoor(doorNumber);
                         break;
                     default:
                 }

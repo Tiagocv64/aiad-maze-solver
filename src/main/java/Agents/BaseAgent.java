@@ -297,6 +297,7 @@ public class BaseAgent extends Agent{
             } else {
                 pathToButton = null;
                 sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_OPEN, baseAgent.mazeRunner.hasButton(position).getDoor().getNumber()));
+                sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, baseAgent.mazeRunner.hasButton(position).getDoor().getNumber()));
                 isHandlingRequest = false;
                 buttonToFind = -1;
                 standingOnButton = true;
