@@ -9,6 +9,7 @@ public class Door implements Serializable {
     private Color color;
     private int number;
     private boolean open;
+    private boolean found;
     private List<Position> pathDoorToButton;
 
     public Door(Color color, int number) {
@@ -47,5 +48,13 @@ public class Door implements Serializable {
 
     public void setPathDoorToButton(List<Position> pathDoorToButton) {
         this.pathDoorToButton = pathDoorToButton;
+    }
+
+    public boolean isFound() {
+        return found;
+    }
+
+    public void setFound(boolean found) {
+        this.found = found;
     }
 }

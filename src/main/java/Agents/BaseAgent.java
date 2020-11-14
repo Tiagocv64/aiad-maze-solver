@@ -42,6 +42,7 @@ public class BaseAgent extends Agent{
     Stack<Position> pathToButton = null;
     ListeningBehaviour listeningBehaviour;
     Position next = null;
+    Boolean finished = false;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -98,7 +99,7 @@ public class BaseAgent extends Agent{
             }
             msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
             // We want to receive a reply in 6 secs
-            msg.setReplyByDate(new Date(System.currentTimeMillis() + 6000));
+            msg.setReplyByDate(new Date(System.currentTimeMillis() + 4000));
             msg.setContentObject(message);
         } catch (FIPAException | IOException e) {
             e.printStackTrace();
@@ -248,8 +249,13 @@ public class BaseAgent extends Agent{
 
                 isWaiting = true;
                 // starts FIPA contract with all agents
-                this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
-                return;
+                // only if nobody started contract already (if nobody found the door first)
+                if (!door.isFound()) {
+                    door.setFound(true);
+                    this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
+                    return;
+                }
+
             }
 
             mazeRunner.updatePosition(position, next, info);
@@ -267,7 +273,6 @@ public class BaseAgent extends Agent{
         }
 
         public void searchButton() {
-            System.out.println("searching button");
             if (pathToButton.size() > 0) {
                 Position next = pathToButton.pop();
 
@@ -284,7 +289,6 @@ public class BaseAgent extends Agent{
                 isHandlingRequest = false;
                 buttonToFind = -1;
                 standingOnButton = true;
-                System.out.println("standing on button");
             }
 
             mazeRunner.updatePosition(position, next, info);
@@ -298,6 +302,7 @@ public class BaseAgent extends Agent{
                 return;
 
             if (isWaiting) {
+                System.out.println("waiting on door: " + baseAgent.mazeRunner.hasDoor(next).getNumber());
                 if (baseAgent.mazeRunner.hasDoor(next).isOpen()) {
                     searchGoal();
                     isWaiting = false;
@@ -317,7 +322,7 @@ public class BaseAgent extends Agent{
             }
         }
         public boolean done() {
-            return n > 40;
+            return finished;
         }
     }
 
