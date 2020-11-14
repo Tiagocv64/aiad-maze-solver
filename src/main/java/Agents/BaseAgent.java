@@ -42,6 +42,7 @@ public class BaseAgent extends Agent{
     Stack<Position> pathToButton = null;
     ListeningBehaviour listeningBehaviour;
     Position next = null;
+    Boolean finished = false;
 
     protected void setup() {
         Object[] args = getArguments();
@@ -317,7 +318,7 @@ public class BaseAgent extends Agent{
             }
         }
         public boolean done() {
-            return n > 40;
+            return finished;
         }
     }
 
