@@ -28,14 +28,12 @@ public class Maze implements Serializable
         N = size;
         doorsNumber = doors;
         cells = new Cell[N * N]; // creates array of Cells
-        colors.add(Color.GREEN);
-        colors.add(Color.MAGENTA);
         colors.add(Color.CYAN);
-        colors.add(Color.BLUE);
         colors.add(Color.ORANGE);
         colors.add(Color.PINK);
         colors.add(Color.GRAY);
         colors.add(Color.YELLOW);
+        colors.add(Color.BLACK);
 
         for (int i = 0; i < N * N; i++) // initializes array with Cell objects
         {
