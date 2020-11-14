@@ -249,7 +249,6 @@ public class BaseAgent extends Agent{
                 // starts FIPA contract with all agents
                 // only if nobody started contract already (if nobody found the door first)
                 if (!agentMazeInfo.foundDoors.contains(door.getNumber())) {
-                    door.setFound(true);
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_FOUND, door.getNumber()));
                     this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
                 }
