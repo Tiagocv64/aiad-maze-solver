@@ -216,7 +216,7 @@ public class Maze implements Serializable
                 cells[current].isPath = true;
                 if (doorsNumber > 0 && distanceBetweenDoors > 15 && generator.nextInt(99) > 60) {
                     if (lastDoor != null) {
-                        Button button = createButton(current, 20, doorsNumber);
+                        Button button = createButton(current, 20, doorsNumber, new ArrayList<>());
                         button.setDoor(lastDoor);
                         lastDoor.setButton(button);
                         buttons.put(button.getCell(), button);
@@ -233,7 +233,7 @@ public class Maze implements Serializable
                 distanceBetweenDoors++;
             }
             if (lastDoor != null) {
-            Button button = createButton(current, 4, doorsNumber);
+            Button button = createButton(current, 4, doorsNumber, new ArrayList<>());
             button.setDoor(lastDoor);
             lastDoor.setButton(button);
             buttons.put(button.getCell(), button);
@@ -249,11 +249,11 @@ public class Maze implements Serializable
         // cell
     }
 
-    public Button createButton(int cell, int distance, int number) {
+    public Button createButton(int cell, int distance, int number, List<Position> pathDoorToButton) {
         if (distance == 0) {
             if (cells[cell].isPath)
-                return createButton(cell, 1, number);
-            return new Button(cell, number);
+                return createButton(cell, 1, number, pathDoorToButton);
+            return new Button(cell, number, pathDoorToButton);
         }
 
         Cell startCell = cells[cell];
@@ -290,8 +290,9 @@ public class Maze implements Serializable
         }
 
         currentCell = cells[adjacent];
+        pathDoorToButton.add(new Position(adjacent % N, adjacent / N));
 
-        return createButton(adjacent, distance - 1, number);
+        return createButton(adjacent, distance - 1, number, pathDoorToButton);
     }
 
     public void depthSearch(int cell) // executes a first breath search to find
