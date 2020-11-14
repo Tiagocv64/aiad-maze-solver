@@ -274,6 +274,7 @@ public class BaseAgent extends Agent{
                     mazeRunner.updatePosition(position, next, info);
                     sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
+                    position = next;
                 }
 
             } else {
