@@ -36,7 +36,6 @@ public class ReasonableAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException, FailureException, NotUnderstoodException {
-            System.out.println("Received cfp " + getLocalName());
 
             if (!isHandlingRequest && !standingOnButton) {
                 // Agent calculates distance between current position and button
@@ -66,11 +65,10 @@ public class ReasonableAgent extends BaseAgent{
 
         @Override
         protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
-            System.out.println("Received accept proposal");
             isHandlingRequest = true;
             if (true) { // do something
                 // set goal to button position
-                System.out.println("Agent: " + getLocalName() + ": Looking for button");
+                System.out.println("Agent " + getLocalName() + ": Looking for button");
                 ACLMessage inform = accept.createReply();
                 inform.setPerformative(ACLMessage.INFORM);
                 try {
@@ -79,6 +77,7 @@ public class ReasonableAgent extends BaseAgent{
                     inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
                     Button button = mazeRunner.maze.getButton(buttonToFind);
                     pathToButton = mazeRunner.getPathBetween(position,  new Position(button.getCell() % mazeRunner.maze.N, button.getCell() / mazeRunner.maze.N));
+                    System.out.println("Agent " + getLocalName() + ": looking for button!");
                 } catch (IOException | UnreadableException e) {
                     e.printStackTrace();
                 }

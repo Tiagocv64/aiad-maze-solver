@@ -94,10 +94,6 @@ public class MazeAgent extends Agent {
                     e.printStackTrace();
                 }
 
-                // System.out.println(agentMessage.getSender());
-                // System.out.println(agentMessage.getDescription());
-                // System.out.println(agentMessage.getContent());
-
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ASK_MAZE_INFO:
 
@@ -119,26 +115,6 @@ public class MazeAgent extends Agent {
                         Position next = (Position) contents[1];
                         AgentInfo info = (AgentInfo) contents[2];
                         mazeRunner.updatePosition(current, next, info);
-
-                        break;
-                    case AgentMessage.OPEN_DOOR:
-                        Position buttonPosition = (Position) ((Object[]) agentMessage.getContent())[0];
-                        Button button = maze.hasButton(buttonPosition);
-                        if (button != null) {
-                            button.getDoor().openDoor();
-                            System.out.println("Opening door: " + button.getDoor());
-                            // door stays open for 2 seconds
-                            /* new java.util.Timer().schedule(
-                                    new java.util.TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            button.getDoor().closeDoor();
-                                        }
-                                    },
-                                    2000
-                            ); */
-
-                        }
                         break;
                     default:
                 }
