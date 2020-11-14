@@ -21,7 +21,6 @@ public class Button implements Serializable {
 
     public void setDoor(Door door) {
         this.door = door;
-        this.door.setPathDoorToButton(this.pathDoorToButton);
     }
 
     public int getCell() {

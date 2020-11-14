@@ -4,8 +4,6 @@ import Maze.Maze;
 import Maze.MazePanel;
 import Maze.MazeRunner;
 import Maze.Position;
-import Maze.Button;
-import Maze.Door;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -18,7 +16,6 @@ import jade.lang.acl.UnreadableException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.TimerTask;
 
 public class MazeAgent extends Agent {
 
@@ -93,10 +90,6 @@ public class MazeAgent extends Agent {
                 } catch (UnreadableException e) {
                     e.printStackTrace();
                 }
-
-                // System.out.println(agentMessage.getSender());
-                // System.out.println(agentMessage.getDescription());
-                // System.out.println(agentMessage.getContent());
 
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ASK_MAZE_INFO:

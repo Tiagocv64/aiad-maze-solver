@@ -84,8 +84,6 @@ public class BaseAgent extends Agent{
         // Fill the CFP message
         ACLMessage msg = new ACLMessage(ACLMessage.CFP);
 
-        System.out.println("Starting Contract: " + getLocalName());
-
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType("Agent");
@@ -95,7 +93,6 @@ public class BaseAgent extends Agent{
             for (int i = 0; i < result.length; ++i) {
                 if (!getLocalName().equals(result[i].getName().getLocalName())) {
                     msg.addReceiver(result[i].getName());
-                    System.out.println("Receiver: " + result[i].getName().getLocalName());
                 }
             }
             msg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
@@ -246,24 +243,21 @@ public class BaseAgent extends Agent{
             // verify this by message later
             Door door = baseAgent.mazeRunner.hasDoor(next);
             if (door != null && !agentMazeInfo.openDoors.contains(door.getNumber())) { // has door and its closed
-                System.out.println("found door!!");
+                System.out.println("Agent " + getLocalName() + ": found door!");
                 waitingDoor = door.getNumber();
                 isWaiting = true;
                 // starts FIPA contract with all agents
                 // only if nobody started contract already (if nobody found the door first)
                 if (!agentMazeInfo.foundDoors.contains(door.getNumber())) {
-                    door.setFound(true);
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_FOUND, door.getNumber()));
                     this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
-                } else {
-                    System.out.println("Was found already!!");
                 }
 
                 return;
             }
 
             if (next.getX() >= agentMazeInfo.N || next.getY() >= agentMazeInfo.N) {
-                System.out.println("Finished Maze");
+                System.out.println("Agent " + getLocalName() + ": finished maze!");
                 finished = true;
                 return;
             }
@@ -317,6 +311,7 @@ public class BaseAgent extends Agent{
                 searchButton();
             } else if (isWaiting) {
                 if (agentMazeInfo.openDoors.contains(waitingDoor)) {
+                    System.out.println("Agent " + getLocalName() + ": door is now open!");
                     searchGoal();
                     isWaiting = false;
                 }
@@ -367,7 +362,6 @@ public class BaseAgent extends Agent{
                         break;
                     case AgentMessage.INFORM_AGENTS_OF_MOVE:
 
-                        // System.out.println(agentMessage.getDescription());
                         Position senderPosition = (Position) agentMessage.getContent();
                         baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
 
@@ -411,19 +405,18 @@ public class BaseAgent extends Agent{
         protected void handleAllResponses(Vector responses, Vector acceptances) {
             if (responses.size() < 1) {
                 // Nobody replied r within the specified timeout
-                System.out.println("Timeout expired: 0 responses");
+                System.out.println("Agent " + getLocalName() + ": Timeout expired - 0 responses");
             }
 
             // Evaluate proposals.
 
-            System.out.println("Agent " + getLocalName() + ": Handling proposals");
             int bestProposal = 1000;
             AID bestProposer = null;
             ACLMessage accept = null;
             Enumeration e = responses.elements();
             while (e.hasMoreElements()) {
                 ACLMessage msg = (ACLMessage) e.nextElement();
-                System.out.println("Agent " + getLocalName() + ": Proposal from: " + msg.getSender().getName());
+                System.out.println("Agent " + getLocalName() + ": Received proposal from: " + msg.getSender().getLocalName());
                 if (msg.getPerformative() == ACLMessage.PROPOSE) {
                     ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
@@ -435,7 +428,6 @@ public class BaseAgent extends Agent{
                     } catch (UnreadableException e1) {
                         e1.printStackTrace();
                     }
-                    System.out.println("Proposal received: " + proposal);
                     if (proposal < bestProposal) {
                         bestProposal = proposal;
                         bestProposer = msg.getSender();
@@ -449,7 +441,7 @@ public class BaseAgent extends Agent{
             }
             // Accept the proposal of the best proposer
             if (accept != null) {
-                System.out.println("Agent " + getLocalName() + ": Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
+                System.out.println("Agent " + getLocalName() + ": Accepting proposal "+bestProposal+" from responder "+bestProposer.getLocalName());
                 accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 acceptances.addElement(accept);
             }

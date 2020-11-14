@@ -403,7 +403,6 @@ public class Maze implements Serializable
                     if (cells[adjacent].visitedBy == -1 && !found) {
                         cells[adjacent].visitedBy = cell;
                         if (adjacent == goal && !found) {
-                            System.out.println("found goal crlh");
                             found = true;
                             return;
                         }
