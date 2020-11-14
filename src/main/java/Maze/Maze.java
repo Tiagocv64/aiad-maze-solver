@@ -337,16 +337,13 @@ public class Maze implements Serializable
 
     public Stack<Position> getPath(int cell, int goal) {
         resetCellsVisitors();
-        System.out.println("goal: " + goal);
         Stack<Position> toVisit = new Stack<Position>();
         search(cell, goal);
         Cell current = cells[goal];
         toVisit.push(new Position(goal % N, goal / N));
-        System.out.println("oi: " + current.visitedBy);
         cells[cell].visitedBy = -1;
         found = false;
         while (current.visitedBy != -1) {
-            System.out.println(new Position(current.visitedBy % N, current.visitedBy / N));
             toVisit.push(new Position(current.visitedBy % N, current.visitedBy / N));
             current = cells[current.visitedBy];
         }

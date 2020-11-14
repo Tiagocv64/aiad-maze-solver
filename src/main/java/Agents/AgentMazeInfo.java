@@ -4,13 +4,17 @@ import Maze.Button;
 import Maze.Position;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AgentMazeInfo {
 
     int N;
     CellInfo[][] cellsInfo;
     private HashMap<Integer, Button> buttons = new HashMap<>();
+    Set<Integer> foundDoors = new HashSet<>();
+    Set<Integer> openDoors = new HashSet<>();
 
 
     public AgentMazeInfo(int size){

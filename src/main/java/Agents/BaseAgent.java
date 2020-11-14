@@ -34,6 +34,7 @@ public class BaseAgent extends Agent{
     Stack<Position> toVisit = new Stack<Position>();
     Boolean isHandlingRequest = false;
     Boolean isWaiting = false;
+    Integer waitingDoor = -1;
     Boolean standingOnButton = false;
     AgentInfo info;
     AgentMazeInfo agentMazeInfo;
@@ -244,17 +245,20 @@ public class BaseAgent extends Agent{
             // verify if it is a door
             // verify this by message later
             Door door = baseAgent.mazeRunner.hasDoor(next);
-            if (door != null && !door.isOpen()) { // has door and its closed
+            if (door != null && !agentMazeInfo.openDoors.contains(door.getNumber())) { // has door and its closed
                 System.out.println("found door!!");
-
+                waitingDoor = door.getNumber();
                 isWaiting = true;
                 // starts FIPA contract with all agents
                 // only if nobody started contract already (if nobody found the door first)
-                if (!door.isFound()) {
+                if (!agentMazeInfo.foundDoors.contains(door.getNumber())) {
                     door.setFound(true);
+                    sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_FOUND, door.getNumber()));
                     this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
                     return;
                 }
+                System.out.println("Was found already!!");
+
 
             }
 
@@ -285,7 +289,7 @@ public class BaseAgent extends Agent{
 
             } else {
                 pathToButton = null;
-                sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.OPEN_DOOR, new Object[] {position}));
+                sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_OPEN, baseAgent.mazeRunner.hasButton(position).getDoor().getNumber()));
                 isHandlingRequest = false;
                 buttonToFind = -1;
                 standingOnButton = true;
@@ -302,8 +306,7 @@ public class BaseAgent extends Agent{
                 return;
 
             if (isWaiting) {
-                System.out.println("waiting on door: " + baseAgent.mazeRunner.hasDoor(next).getNumber());
-                if (baseAgent.mazeRunner.hasDoor(next).isOpen()) {
+                if (agentMazeInfo.openDoors.contains(waitingDoor)) {
                     searchGoal();
                     isWaiting = false;
                 }
@@ -372,8 +375,17 @@ public class BaseAgent extends Agent{
                         baseAgent.agentMazeInfo.foundButton(button);
 
                         break;
+                    case AgentMessage.INFORM_DOOR_FOUND:
+                        Integer foundDoor = (Integer) agentMessage.getContent();
+                        agentMazeInfo.foundDoors.add(foundDoor);
+                        break;
+                    case AgentMessage.INFORM_DOOR_OPEN:
+                        Integer openDoor = (Integer) agentMessage.getContent();
+                        agentMazeInfo.openDoors.add(openDoor);
+                        break;
                     case AgentMessage.LOOKING_FOR_BUTTON:
                         // do nothing (just wait)
+                        break;
                     default:
                 }
 

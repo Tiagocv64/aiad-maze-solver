@@ -126,7 +126,7 @@ public class MazeAgent extends Agent {
                         Button button = maze.hasButton(buttonPosition);
                         if (button != null) {
                             button.getDoor().openDoor();
-                            System.out.println("Opening door: " + button.getDoor().getNumber());
+                            System.out.println("Opening door: " + button.getDoor());
                             // door stays open for 2 seconds
                             /* new java.util.Timer().schedule(
                                     new java.util.TimerTask() {

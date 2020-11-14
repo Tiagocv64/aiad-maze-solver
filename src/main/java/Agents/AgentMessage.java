@@ -12,6 +12,8 @@ public class AgentMessage implements Serializable {
     public static final String REQUEST_OPEN_DOOR = "REQUEST_OPEN_DOOR";
     public static final String INFORM_AGENTS_OF_MOVE = "INFORM_AGENTS_OF_MOVE";
     public static final String INFORM_AGENTS_OF_BUTTON= "INFORM_AGENTS_OF_BUTTON";
+    public static final String INFORM_DOOR_FOUND= "INFORM_DOOR_FOUND";
+    public static final String INFORM_DOOR_OPEN = "INFORM_DOOR_OPEN";
     public static final String PROPOSE = "PROPOSE";
     public static final String LOOKING_FOR_BUTTON = "LOOKING_FOR_BUTTON";
     public static final String OPEN_DOOR = "OPEN_DOOR";
