@@ -255,11 +255,11 @@ public class BaseAgent extends Agent{
                     door.setFound(true);
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_FOUND, door.getNumber()));
                     this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
-                    return;
+                } else {
+                    System.out.println("Was found already!!");
                 }
-                System.out.println("Was found already!!");
 
-
+                return;
             }
 
             mazeRunner.updatePosition(position, next, info);
