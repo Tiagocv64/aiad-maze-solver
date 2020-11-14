@@ -262,6 +262,12 @@ public class BaseAgent extends Agent{
                 return;
             }
 
+            if (next.getX() >= agentMazeInfo.N || next.getX() >= agentMazeInfo.N) {
+                System.out.println("Finished Maze");
+                finished = true;
+                return;
+            }
+
             mazeRunner.updatePosition(position, next, info);
 
             sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
@@ -349,9 +355,6 @@ public class BaseAgent extends Agent{
                     e.printStackTrace();
                 }
 
-                // System.out.println(agentMessage.getSender());
-                // System.out.println(agentMessage.getDescription());
-                // System.out.println(agentMessage.getContent());
 
                 switch (agentMessage.getDescription()) {
                     case AgentMessage.ANSWER_MAZE_INFO:

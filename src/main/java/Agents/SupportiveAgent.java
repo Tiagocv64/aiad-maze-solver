@@ -38,7 +38,7 @@ public class SupportiveAgent extends BaseAgent{
             System.out.println("Received cfp " + getLocalName());
 
             // supportive agents always accepts if he's not already handling a request
-            if (!isHandlingRequest) {
+            if (!isHandlingRequest && !standingOnButton) {
                 // Agent calculates distance between current position and button
                 int distance = 0;
                 try {
