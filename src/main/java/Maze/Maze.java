@@ -485,8 +485,7 @@ public class Maze implements Serializable
                         if (!doors.get(count).isOpen()) {
                             g.setColor(doors.get(count).getColor());
 
-                            g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
-                                    + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint a door
+                            g.fillRect(i * CELL_WIDTH, j * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH); // paint a door
                         }
                     }
 
