@@ -44,10 +44,12 @@ public class ReasonableAgent extends BaseAgent{
                 try {
                     AgentMessage agentMessage = (AgentMessage) cfp.getContentObject();
                     buttonToFind = (Integer) ((Object[]) agentMessage.getContent())[0];
-                    System.out.println("Agent "+getLocalName()+": Proposing "+effort + " to " + cfp.getSender().getLocalName());
+                    Button button = mazeRunner.maze.getButton(buttonToFind);
+                    distance = mazeRunner.getPathBetween(position,  new Position(button.getCell() % mazeRunner.maze.N, button.getCell() / mazeRunner.maze.N)).size();
+                    System.out.println("Agent "+getLocalName()+": Proposing "+distance + " to " + cfp.getSender().getLocalName());
                     ACLMessage propose = cfp.createReply();
                     propose.setPerformative(ACLMessage.PROPOSE);
-                    propose.setContentObject(new AgentMessage(getAID(), AgentMessage.PROPOSE, new Object[] {effort}));
+                    propose.setContentObject(new AgentMessage(getAID(), AgentMessage.PROPOSE, distance));
                     return propose;
                 } catch (UnreadableException | IOException e) {
                     e.printStackTrace();
@@ -72,10 +74,12 @@ public class ReasonableAgent extends BaseAgent{
                 ACLMessage inform = accept.createReply();
                 inform.setPerformative(ACLMessage.INFORM);
                 try {
+                    AgentMessage proposeMessage = (AgentMessage) propose.getContentObject();
+                    effort += (Integer) proposeMessage.getContent();
                     inform.setContentObject(new AgentMessage(getAID(), AgentMessage.LOOKING_FOR_BUTTON, null));
                     Button button = mazeRunner.maze.getButton(buttonToFind);
                     pathToButton = mazeRunner.getPathBetween(position,  new Position(button.getCell() % mazeRunner.maze.N, button.getCell() / mazeRunner.maze.N));
-                } catch (IOException e) {
+                } catch (IOException | UnreadableException e) {
                     e.printStackTrace();
                 }
                 return inform;

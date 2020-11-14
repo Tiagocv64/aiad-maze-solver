@@ -385,7 +385,7 @@ public class Maze implements Serializable
                         adjacent = cell - 1;
                     }
 
-                    if (adjacent > (N * N) || adjacent < 0) // check if path goes out of bounds
+                    if (adjacent >= (N * N) || adjacent < 0) // check if path goes out of bounds
                         continue;
                     if (cells[adjacent].visitedBy == -1 && !found) {
                         cells[adjacent].visitedBy = cell;
