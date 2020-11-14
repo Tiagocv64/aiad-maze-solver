@@ -266,6 +266,7 @@ public class BaseAgent extends Agent{
         }
 
         public void searchButton() {
+            System.out.println("searching button");
             if (pathToButton.size() > 0) {
                 Position next = pathToButton.pop();
 
@@ -281,6 +282,8 @@ public class BaseAgent extends Agent{
                 isHandlingRequest = false;
                 buttonToFind = -1;
             }
+
+            mazeRunner.updatePosition(position, next, info);
         }
 
         public void action() {
