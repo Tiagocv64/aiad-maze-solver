@@ -21,7 +21,7 @@ public class Maze implements Serializable
     private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
     private HashMap<Position, Set<AgentInfo>> agentPositions = new HashMap<Position, Set<AgentInfo>>();
     private int doorsNumber;
-    private int frame = 0;
+    private boolean found = false;
 
     public Maze(int size, int doors)
     {
@@ -339,57 +339,71 @@ public class Maze implements Serializable
         resetCellsVisitors();
         System.out.println("goal: " + goal);
         Stack<Position> toVisit = new Stack<Position>();
-        Cell current = search(cell, goal);
+        search(cell, goal);
+        Cell current = cells[goal];
+        toVisit.push(new Position(current.visitedBy % N, current.visitedBy / N));
+        System.out.println("oi: " + current.visitedBy);
+        cells[cell].visitedBy = -1;
+        found = false;
         while (current.visitedBy != -1) {
+            System.out.println(new Position(current.visitedBy % N, current.visitedBy / N));
             toVisit.push(new Position(current.visitedBy % N, current.visitedBy / N));
+            current = cells[current.visitedBy];
         }
         return toVisit;
     }
 
-    private Cell search(int cell, int goal) // executes a first breath search to find
+    private void search(int cell, int goal) // executes a first breath search to find
     // a path in the maze
     {
-        System.out.println(cell);
-        Cell startCell = cells[cell]; // current cell being checked
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        queue.add(cell);
+        cells[cell].visitedBy = 0;
+        Cell current = null;
 
-        for (int i = 0; i < 4; i++) // check if there is a path north, south,
-        // east, or west
-        {
-            int adjacent = -1;
+        while (queue.size() != 0) {
+            cell = queue.poll();
+            current = cells[cell];
 
-            if (startCell.walls[i] == N * N) // if there is no wall in north,
-            // south, east or west direction
+            for (int i = 0; i < 4; i++) // check if there is a path north, south,
+            // east, or west
             {
-                if (i == NORTH)
-                {
-                    adjacent = cell - N;
-                }
-                if (i == SOUTH)
-                {
-                    adjacent = cell + N;
-                }
-                if (i == EAST)
-                {
-                    adjacent = cell + 1;
-                }
-                if (i == WEST)
-                {
-                    adjacent = cell - 1;
-                }
+                int adjacent = -1;
 
-                System.out.println("viseted by: " + cells[adjacent].visitedBy);
-                System.out.println("adjacent: " + adjacent);
-                if (cells[adjacent].visitedBy == -1)
+                if (current.walls[i] == N * N) // if there is no wall in north,
+                // south, east or west direction
                 {
-                    cells[adjacent].visitedBy = cell;
-                    if (adjacent == goal) {
-                        return cells[adjacent];
+                    if (i == NORTH)
+                    {
+                        adjacent = cell - N;
                     }
-                    return search(adjacent, goal);
+                    if (i == EAST)
+                    {
+                        adjacent = cell + 1;
+                    }
+                    if (i == SOUTH)
+                    {
+                        adjacent = cell + N;
+                    }
+                    if (i == WEST)
+                    {
+                        adjacent = cell - 1;
+                    }
+
+
+                    if (cells[adjacent].visitedBy == -1 && !found) {
+                        cells[adjacent].visitedBy = cell;
+                        if (adjacent == goal && !found) {
+                            System.out.println("found goal crlh");
+                            found = true;
+                            return;
+                        }
+                        queue.add(adjacent);
+                    }
                 }
             }
+
         }
-        return null;
     }
 
     public void draw(Graphics g) // draws a maze and its solution
