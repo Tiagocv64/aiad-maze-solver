@@ -28,7 +28,7 @@ public class Maze implements Serializable
         N = size;
         doorsNumber = doors;
         cells = new Cell[N * N]; // creates array of Cells
-        colors.add(Color.CYAN);
+        colors.add(Color.MAGENTA);
         colors.add(Color.ORANGE);
         colors.add(Color.PINK);
         colors.add(Color.GRAY);
@@ -207,14 +207,19 @@ public class Maze implements Serializable
             path[N * N - 1] = true; // path ends on bottom right cell
 
             int current = cells[N * N - 1].visitedBy; // start on the last, bottom right cell
+            int doorSeparation = -1;
+            int buttonDistance = 20;
+            if (doorsNumber > 0) {
+                doorSeparation = N / doorsNumber;
+            }
             int distanceBetweenDoors = 0;
             Door lastDoor = null;
             while (current != 0) // follows the path back to the starting cell
             {
                 cells[current].isPath = true;
-                if (doorsNumber > 0 && distanceBetweenDoors > 15 && generator.nextInt(99) > 60) {
+                if (doorsNumber > 0 && distanceBetweenDoors > doorSeparation && generator.nextInt(99) > (N * 2)) {
                     if (lastDoor != null) {
-                        Button button = createButton(current, 20, doorsNumber, new ArrayList<>());
+                        Button button = createButton(current, buttonDistance, doorsNumber, new ArrayList<>());
                         button.setDoor(lastDoor);
                         lastDoor.setButton(button);
                         buttons.put(button.getCell(), button);
@@ -385,7 +390,7 @@ public class Maze implements Serializable
                         adjacent = cell - 1;
                     }
 
-                    if (adjacent > (N * N) || adjacent < 0) // check if path goes out of bounds
+                    if (adjacent >= (N * N) || adjacent < 0) // check if path goes out of bounds
                         continue;
                     if (cells[adjacent].visitedBy == -1 && !found) {
                         cells[adjacent].visitedBy = cell;
