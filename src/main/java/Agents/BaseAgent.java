@@ -305,18 +305,16 @@ public class BaseAgent extends Agent{
             if (standingOnButton)
                 return;
 
-            if (isWaiting) {
+            if (isHandlingRequest && buttonToFind != -1) {
+                searchButton();
+            } else if (isWaiting) {
                 if (agentMazeInfo.openDoors.contains(waitingDoor)) {
                     searchGoal();
                     isWaiting = false;
                 }
-            }
-            else if (isHandlingRequest && buttonToFind != -1) {
-                searchButton();
             } else {
                 searchGoal();
             }
-
 
             try {
                 TimeUnit.MILLISECONDS.sleep(600);
