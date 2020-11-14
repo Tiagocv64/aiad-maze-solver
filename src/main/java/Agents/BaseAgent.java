@@ -262,6 +262,12 @@ public class BaseAgent extends Agent{
                 return;
             }
 
+            if (next.getX() >= agentMazeInfo.N || next.getX() >= agentMazeInfo.N) {
+                System.out.println("Finished Maze");
+                finished = true;
+                return;
+            }
+
             mazeRunner.updatePosition(position, next, info);
 
             sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
@@ -349,9 +355,6 @@ public class BaseAgent extends Agent{
                     e.printStackTrace();
                 }
 
-                // System.out.println(agentMessage.getSender());
-                // System.out.println(agentMessage.getDescription());
-                // System.out.println(agentMessage.getContent());
 
                 switch (agentMessage.getDescription()) {
                     case AgentMessage.ANSWER_MAZE_INFO:
@@ -412,7 +415,7 @@ public class BaseAgent extends Agent{
             // Evaluate proposals.
 
             System.out.println("Agent " + getLocalName() + ": Handling proposals");
-            int bestProposal = -1;
+            int bestProposal = 1000;
             AID bestProposer = null;
             ACLMessage accept = null;
             Enumeration e = responses.elements();
@@ -426,12 +429,12 @@ public class BaseAgent extends Agent{
                     int proposal = 0;
                     try {
                         AgentMessage agentMessage = (AgentMessage) msg.getContentObject();
-                        proposal = (Integer) ((Object[]) agentMessage.getContent())[0];
+                        proposal = (Integer) agentMessage.getContent();
                     } catch (UnreadableException e1) {
                         e1.printStackTrace();
                     }
                     System.out.println("Proposal received: " + proposal);
-                    if (proposal > bestProposal) {
+                    if (proposal < bestProposal) {
                         bestProposal = proposal;
                         bestProposer = msg.getSender();
                         accept = reply;
