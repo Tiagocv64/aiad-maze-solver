@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-public class BaseAgent extends Agent{
+public abstract class BaseAgent extends Agent{
 
     MazeRunner mazeRunner = null;
     Position previousPosition;
