@@ -18,6 +18,10 @@ repositories {
     }
 }
 
+run {
+    standardInput = System.in
+}
+
 dependencies {
     implementation name: 'jade'
     implementation fileTree(include: ['*.jar'], dir: 'libs/lib')
