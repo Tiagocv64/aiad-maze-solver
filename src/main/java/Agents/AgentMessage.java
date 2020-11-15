@@ -17,6 +17,7 @@ public class AgentMessage implements Serializable {
     public static final String PROPOSE = "PROPOSE";
     public static final String LOOKING_FOR_BUTTON = "LOOKING_FOR_BUTTON";
     public static final String OPEN_DOOR = "OPEN_DOOR";
+    public static final String EXIT_FOUND = "EXIT_FOUND";
 
     private final AID sender;  // Who sent the message
     private final String description;  // What is in the message

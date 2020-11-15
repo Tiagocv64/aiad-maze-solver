@@ -118,6 +118,9 @@ public class MazeAgent extends Agent {
                         Integer doorNumber = (Integer) agentMessage.getContent();
                         maze.openDoor(doorNumber);
                         break;
+                    case AgentMessage.EXIT_FOUND:
+                        maze.lightPath();
+                        break;
                     default:
                 }
             }

@@ -258,6 +258,7 @@ public abstract class BaseAgent extends Agent{
 
             if (next.getX() >= agentMazeInfo.N || next.getY() >= agentMazeInfo.N) {
                 System.out.println("Agent " + getLocalName() + ": finished maze!");
+                sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.EXIT_FOUND, "exit"));
                 finished = true;
                 return;
             }

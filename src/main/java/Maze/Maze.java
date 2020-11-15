@@ -13,6 +13,8 @@ public class Maze implements Serializable
     public static final int MARGIN = 0; // buffer between window edge and maze
     public static final int DOT_SIZE = 10; // size of maze solution dot
     public static final int DOT_MARGIN = 5; // space between wall and dot
+    public static final int PATH_DOT_SIZE = 6; // size of maze solution dot
+    public static final int PATH_DOT_MARGIN = 7; // space between wall and dot
     public int N; // size of maze
     public Cell[] cells; // array containing all the cells in the maze
     private boolean[] path; // array representing the unique path solution
@@ -22,6 +24,7 @@ public class Maze implements Serializable
     private HashMap<Position, Set<AgentInfo>> agentPositions = new HashMap<Position, Set<AgentInfo>>();
     private int doorsNumber;
     private boolean found = false;
+    private boolean exitFound = false;
 
     public Maze(int size, int doors)
     {
@@ -109,6 +112,10 @@ public class Maze implements Serializable
                 set.setValue(door);
             }
         }
+    }
+
+    public void lightPath() {
+        this.exitFound = true;
     }
 
     public static class Cell implements Serializable // Class representing a cell in a maze.
@@ -488,9 +495,9 @@ public class Maze implements Serializable
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
                 }
 
-                if (path[count]) { // if cell is part of the path
-                    //g.setColor(Color.BLACK);
-                    //g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint path
+                if (path[count] && exitFound) { // if cell is part of the path
+                    g.setColor(Color.BLACK);
+                    g.fillOval(i * CELL_WIDTH + MARGIN + PATH_DOT_MARGIN, j * CELL_WIDTH + MARGIN + PATH_DOT_MARGIN, PATH_DOT_SIZE, PATH_DOT_SIZE); // paint path
                 }
 
                 if (doors.containsKey(count)) {
