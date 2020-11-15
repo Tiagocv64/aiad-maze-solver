@@ -369,7 +369,6 @@ public abstract class BaseAgent extends Agent{
 
                         break;
                     case AgentMessage.INFORM_AGENTS_OF_BUTTON:
-
                         Button button = (Button) agentMessage.getContent();
                         baseAgent.agentMazeInfo.foundButton(button);
 
