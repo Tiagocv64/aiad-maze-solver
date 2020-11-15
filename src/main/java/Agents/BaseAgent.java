@@ -363,7 +363,9 @@ public abstract class BaseAgent extends Agent{
                     case AgentMessage.INFORM_AGENTS_OF_MOVE:
 
                         Position senderPosition = (Position) agentMessage.getContent();
-                        baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
+                        if (agentMazeInfo != null) {
+                            baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
+                        }
 
                         break;
                     case AgentMessage.INFORM_AGENTS_OF_BUTTON:
