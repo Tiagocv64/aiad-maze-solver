@@ -216,38 +216,46 @@ public class Maze implements Serializable
 
             int current = cells[N * N - 1].visitedBy; // start on the last, bottom right cell
             int doorSeparation = -1;
-            int buttonDistance = 20;
+            int buttonDistance = 30;
+            boolean createButtonNext = false;
             if (doorsNumber > 0) {
                 doorSeparation = N / doorsNumber;
             }
             int distanceBetweenDoors = 0;
-            Door lastDoor = null;
+            Door door = null;
+            boolean lastDoor = false;
+            int lastDoorCell = -1;
             while (current != 0) // follows the path back to the starting cell
             {
                 cells[current].isPath = true;
+                if (createButtonNext && !lastDoor) {
+                    Button button = createButton(current, buttonDistance, doorsNumber, lastDoorCell, new ArrayList<>());
+                    button.setDoor(door);
+                    door.setButton(button);
+                    buttons.put(button.getCell(), button);
+                    createButtonNext = false;
+                }
                 if (doorsNumber > 0 && distanceBetweenDoors > doorSeparation && generator.nextInt(99) > (N * 2)) {
-                    if (lastDoor != null) {
-                        Button button = createButton(current, buttonDistance, doorsNumber, new ArrayList<>());
-                        button.setDoor(lastDoor);
-                        lastDoor.setButton(button);
-                        buttons.put(button.getCell(), button);
-                    }
                     Color randomColor = colors.get(generator.nextInt(colors.size()));
                     colors.remove(randomColor);
-                    lastDoor = new Door(randomColor, doorsNumber);
-                    doors.put(current, lastDoor);
+                    door = new Door(randomColor, doorsNumber);
+                    lastDoorCell = current;
+                    doors.put(current, door);
+                    createButtonNext = true;
                     doorsNumber--;
+                    if (doorsNumber == 0)
+                        lastDoor = true;
                     distanceBetweenDoors = 0;
                 }
                 path[current] = true;
                 current = cells[current].visitedBy;
                 distanceBetweenDoors++;
             }
-            if (lastDoor != null) {
-            Button button = createButton(current, 4, doorsNumber, new ArrayList<>());
-            button.setDoor(lastDoor);
-            lastDoor.setButton(button);
-            buttons.put(button.getCell(), button);
+            if (createButtonNext) {
+                Button button = createButton(current, 4, doorsNumber, lastDoorCell, new ArrayList<>());
+                button.setDoor(door);
+                door.setButton(button);
+                buttons.put(button.getCell(), button);
             }
         }
         else // if maze is of size 1
@@ -260,21 +268,24 @@ public class Maze implements Serializable
         // cell
     }
 
-    public Button createButton(int cell, int distance, int number, List<Position> pathDoorToButton) {
+    public Button createButton(int cell, int distance, int number, int doorCell, List<Position> pathDoorToButton) {
         if (distance == 0) {
             if (cells[cell].isPath)
-                return createButton(cell, 1, number, pathDoorToButton);
+                return createButton(cell, 1, number, doorCell, pathDoorToButton);
             return new Button(cell, number, pathDoorToButton);
         }
 
         Cell startCell = cells[cell];
-        Cell currentCell = cells[cell];
         Random generator = new Random();
         List<Integer> possibleDirections = new ArrayList<>();
-        possibleDirections.add(NORTH);
-        possibleDirections.add(SOUTH);
-        possibleDirections.add(EAST);
-        possibleDirections.add(WEST);
+        if (doorCell != (cell - N))
+            possibleDirections.add(NORTH);
+        if (doorCell != (cell + N))
+            possibleDirections.add(SOUTH);
+        if (doorCell != (cell + 1))
+            possibleDirections.add(EAST);
+        if (doorCell != (cell - 1))
+            possibleDirections.add(WEST);
         int adjacent = -1;
 
         Integer direction = possibleDirections.get(generator.nextInt(possibleDirections.size()));
@@ -300,10 +311,9 @@ public class Maze implements Serializable
             adjacent = cell - 1;
         }
 
-        currentCell = cells[adjacent];
         pathDoorToButton.add(new Position(adjacent % N, adjacent / N));
 
-        return createButton(adjacent, distance - 1, number, pathDoorToButton);
+        return createButton(adjacent, distance - 1, number, doorCell, pathDoorToButton);
     }
 
     public void depthSearch(int cell) // executes a first breath search to find
@@ -478,17 +488,16 @@ public class Maze implements Serializable
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
                 }
 
-                if (path[count] == true) // if cell is part of the path
-                {
+                if (path[count]) { // if cell is part of the path
+                    //g.setColor(Color.BLACK);
+                    //g.fillOval(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint path
+                }
 
-                    if (doors.containsKey(count)) {
-                        if (!doors.get(count).isOpen()) {
-                            g.setColor(doors.get(count).getColor());
-
-                            g.fillRect(i * CELL_WIDTH, j * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH); // paint a door
-                        }
+                if (doors.containsKey(count)) {
+                    if (!doors.get(count).isOpen()) {
+                        g.setColor(doors.get(count).getColor());
+                        g.fillRect(i * CELL_WIDTH, j * CELL_WIDTH, CELL_WIDTH, CELL_WIDTH); // paint a door
                     }
-
                 }
 
                 if (buttons.containsKey(count)) {
