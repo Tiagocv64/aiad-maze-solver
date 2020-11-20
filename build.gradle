@@ -24,6 +24,8 @@ run {
 
 dependencies {
     implementation name: 'jade'
+    implementation name: 'repast'
+    implementation name: 'sajas'
     implementation fileTree(include: ['*.jar'], dir: 'libs/lib')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
