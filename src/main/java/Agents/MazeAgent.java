@@ -4,9 +4,9 @@ import Maze.Maze;
 import Maze.MazePanel;
 import Maze.MazeRunner;
 import Maze.Position;
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.domain.DFService;
+import sajas.core.Agent;
+import sajas.core.behaviours.Behaviour;
+import sajas.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
@@ -24,6 +24,7 @@ public class MazeAgent extends Agent {
 
     @Override
     protected void setup() {
+        System.out.println("i'm a maze");
         Object[] args = getArguments();
         int mazeSize = (Integer) args[0];
         int mazeDoors = (Integer) args[1];

@@ -6,9 +6,9 @@ import Maze.Door;
 import Maze.MazeRunner;
 import Maze.Position;
 import jade.core.AID;
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.domain.DFService;
+import sajas.core.Agent;
+import sajas.core.behaviours.Behaviour;
+import sajas.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
@@ -16,7 +16,10 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import jade.proto.ContractNetInitiator;
+import sajas.proto.ContractNetInitiator;
+import uchicago.src.sim.gui.Drawable;
+import uchicago.src.sim.gui.SimGraphics;
+import uchicago.src.sim.space.Object2DTorus;
 
 import java.awt.*;
 import java.io.IOException;
@@ -25,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-public abstract class BaseAgent extends Agent{
+public abstract class BaseAgent extends Agent {
 
     MazeRunner mazeRunner = null;
     Position previousPosition;
@@ -45,13 +48,18 @@ public abstract class BaseAgent extends Agent{
     Position next = null;
     Boolean finished = false;
 
-    protected void setup() {
-        Object[] args = getArguments();
+    public BaseAgent(Color color) {
+        this.info = new AgentInfo(color);
         this.position = new Position(0 , 0);
         this.previousPosition = new Position(-1 , -1);
         this.toVisit.push(this.position);
-        this.info = new AgentInfo((Color) args[0]);
+    }
 
+
+    @Override
+    protected void setup() {
+        super.setup();
+        System.out.println("setup");
         registerAgentToDF();
 
         listeningBehaviour = new ListeningBehaviour(this);
@@ -66,8 +74,6 @@ public abstract class BaseAgent extends Agent{
         }
 
         addBehaviour(new SearchingBehaviour(this));
-
-//        sendMessageToAllAgents("OLA");
     }
 
     @Override

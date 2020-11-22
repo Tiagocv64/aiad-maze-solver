@@ -2,7 +2,7 @@ package Agents;
 
 import Maze.Button;
 import Maze.Position;
-import jade.core.Agent;
+import sajas.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -10,12 +10,19 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import jade.proto.ContractNetResponder;
+import sajas.proto.ContractNetResponder;
+import uchicago.src.sim.space.Object2DTorus;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class ReasonableAgent extends BaseAgent{
 
+    public ReasonableAgent(Color color) {
+        super(color);
+    }
+
+    @Override
     public void setup(){
         super.setup();
         System.out.println("I'm reasonable");

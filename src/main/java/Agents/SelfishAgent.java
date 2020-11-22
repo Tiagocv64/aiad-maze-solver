@@ -3,9 +3,17 @@ package Agents;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import uchicago.src.sim.space.Object2DTorus;
+
+import java.awt.*;
 
 public class SelfishAgent extends BaseAgent{
 
+    public SelfishAgent(Color color) {
+        super(color);
+    }
+
+    @Override
     public void setup(){
         super.setup();
         System.out.println("I'm selfish");
