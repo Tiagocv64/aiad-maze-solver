@@ -47,6 +47,11 @@ public class App extends SimModelImpl {
 
     public App() {
         super();
+        this.mazeSize = 15;
+        this.doorsNumber = 3;
+        this.selfishAgents = 2;
+        this.reasonableAgents = 2;
+        this.supportiveAgents = 2;
     }
 
 
@@ -57,12 +62,12 @@ public class App extends SimModelImpl {
 
     @Override
     public String[] getInitParam() {
-        return new String[]{"mazeSize", "doorsNUmber", "selfishAgents", "reasonableAgents", "supportiveAgents"};
+        return new String[]{"mazeSize", "doorsNumber", "selfishAgents", "reasonableAgents", "supportiveAgents"};
     }
 
     @Override
     public Schedule getSchedule() {
-        return null;
+        return schedule;
     }
 
     public int getMazeSize() {
@@ -155,7 +160,11 @@ public class App extends SimModelImpl {
     }
 
     private void buildDisplay() {
-
+        // space and display surface
+        Object2DDisplay display = new Object2DDisplay(space);
+        display.setObjectList(agentList);
+        dsurf.addDisplayableProbeable(display, "Agents Space");
+        dsurf.display();
     }
 
 
@@ -181,7 +190,7 @@ public class App extends SimModelImpl {
     private void buildSchedule() {
         schedule.scheduleActionBeginning(0, new MainAction());
         schedule.scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
-        schedule.scheduleActionAtInterval(1, plot, "step", Schedule.LAST);
+        // schedule.scheduleActionAtInterval(1, plot, "step", Schedule.LAST);
     }
 
     class MainAction extends BasicAction {
