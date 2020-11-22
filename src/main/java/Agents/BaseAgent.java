@@ -59,7 +59,6 @@ public abstract class BaseAgent extends Agent {
     @Override
     protected void setup() {
         super.setup();
-        System.out.println("setup");
         registerAgentToDF();
 
         listeningBehaviour = new ListeningBehaviour(this);
@@ -168,7 +167,7 @@ public abstract class BaseAgent extends Agent {
         private BaseAgent baseAgent;
         private int n = 0;
 
-        SearchingBehaviour(BaseAgent baseAgent){
+        SearchingBehaviour(BaseAgent baseAgent) {
             this.baseAgent = baseAgent;
         }
 
@@ -200,11 +199,11 @@ public abstract class BaseAgent extends Agent {
             directions.add(Maze.WEST);
             Random generator = new Random();
             int randomDirection;
-            int[] randomDirections = new int [4];
+            int[] randomDirections = new int[4];
             for (int i = 0; i < 4; i++) {
                 randomDirection = directions.get(generator.nextInt(directions.size()));
                 randomDirections[i] = randomDirection;
-                directions.remove((Integer)randomDirection);
+                directions.remove((Integer) randomDirection);
             }
 
             for (int i = 0; i < 4; i++) {
@@ -214,22 +213,19 @@ public abstract class BaseAgent extends Agent {
                         next = new Position(position.getX(), position.getY() + 1);
                         break;
                     }
-                }
-                else if (randomDirections[i] == Maze.EAST) {
+                } else if (randomDirections[i] == Maze.EAST) {
                     if (possibleMoves[Maze.EAST] && !visited.contains(new Position(position.getX() + 1, position.getY())) &&
                             (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.EAST))) {
                         next = new Position(position.getX() + 1, position.getY());
                         break;
                     }
-                }
-                else if (randomDirections[i] == Maze.NORTH) {
+                } else if (randomDirections[i] == Maze.NORTH) {
                     if (possibleMoves[Maze.NORTH] && !visited.contains(new Position(position.getX(), position.getY() - 1)) &&
                             (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.NORTH))) {
                         next = new Position(position.getX(), position.getY() - 1);
                         break;
                     }
-                }
-                else if (randomDirections[i] == Maze.WEST) {
+                } else if (randomDirections[i] == Maze.WEST) {
                     if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY())) &&
                             (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.WEST))) {
                         next = new Position(position.getX() - 1, position.getY());
@@ -256,7 +252,7 @@ public abstract class BaseAgent extends Agent {
                 // only if nobody started contract already (if nobody found the door first)
                 if (!agentMazeInfo.foundDoors.contains(door.getNumber())) {
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_DOOR_FOUND, door.getNumber()));
-                    this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[] {door.getButton().getCell()}));
+                    this.baseAgent.startContract(new AgentMessage(getAID(), AgentMessage.REQUEST_OPEN_DOOR, new Object[]{door.getButton().getCell()}));
                 }
 
                 return;
@@ -272,7 +268,7 @@ public abstract class BaseAgent extends Agent {
             mazeRunner.updatePosition(position, next, info);
             effort++;
 
-            sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
+            sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[]{position, next, info}));
             sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
             Button button = baseAgent.mazeRunner.hasButton(next);
             if (button != null) {
@@ -290,7 +286,7 @@ public abstract class BaseAgent extends Agent {
 
                 if (next != null) {
                     mazeRunner.updatePosition(position, next, info);
-                    sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[] {position, next, info}));
+                    sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_UPDATE_POS, new Object[]{position, next, info}));
                     sendMessageToAllAgents(new AgentMessage(getAID(), AgentMessage.INFORM_AGENTS_OF_MOVE, next));
                     position = next;
                 }
@@ -307,12 +303,12 @@ public abstract class BaseAgent extends Agent {
             mazeRunner.updatePosition(position, next, info);
         }
 
+        @Override
         public void action() {
-            if (mazeRunner == null){ // waits for maze info
+            System.out.println(getLocalName() + " searching");
+            if (mazeRunner == null || standingOnButton) { // waits for maze info
                 return;
             }
-            if (standingOnButton)
-                return;
 
             if (isHandlingRequest && buttonToFind != -1) {
                 searchButton();
@@ -332,6 +328,8 @@ public abstract class BaseAgent extends Agent {
                 e.printStackTrace();
             }
         }
+
+        @Override
         public boolean done() {
             return finished;
         }
@@ -362,32 +360,34 @@ public abstract class BaseAgent extends Agent {
 
                 switch (agentMessage.getDescription()) {
                     case AgentMessage.ANSWER_MAZE_INFO:
-
                         mazeRunner = (MazeRunner) agentMessage.getContent();
                         agentMazeInfo = new AgentMazeInfo(mazeRunner.maze.N);
-
                         break;
+
                     case AgentMessage.INFORM_AGENTS_OF_MOVE:
-
                         Position senderPosition = (Position) agentMessage.getContent();
-                        if (agentMazeInfo != null) {
+                        if (agentMazeInfo != null)
                             baseAgent.agentMazeInfo.cellsInfo[senderPosition.getX()][senderPosition.getY()].setState(AgentMazeInfo.CellInfo.EXPLORED);
-                        }
-
                         break;
+
                     case AgentMessage.INFORM_AGENTS_OF_BUTTON:
                         Button button = (Button) agentMessage.getContent();
-                        baseAgent.agentMazeInfo.foundButton(button);
-
+                        if (agentMazeInfo != null)
+                            baseAgent.agentMazeInfo.foundButton(button);
                         break;
+
                     case AgentMessage.INFORM_DOOR_FOUND:
                         Integer foundDoor = (Integer) agentMessage.getContent();
-                        agentMazeInfo.foundDoors.add(foundDoor);
+                        if (agentMazeInfo != null)
+                            agentMazeInfo.foundDoors.add(foundDoor);
                         break;
+
                     case AgentMessage.INFORM_DOOR_OPEN:
                         Integer openDoor = (Integer) agentMessage.getContent();
-                        agentMazeInfo.openDoors.add(openDoor);
+                        if (agentMazeInfo != null)
+                            agentMazeInfo.openDoors.add(openDoor);
                         break;
+
                     case AgentMessage.LOOKING_FOR_BUTTON:
                         // do nothing (just wait)
                         break;

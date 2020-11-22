@@ -1,7 +1,4 @@
-import Agents.BaseAgent;
-import Agents.ReasonableAgent;
-import Agents.SelfishAgent;
-import Agents.SupportiveAgent;
+import Agents.*;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
@@ -112,24 +109,23 @@ public class App extends Repast3Launcher {
     }
 
     private void launchAgents() throws StaleProxyException {
-        AgentController mazeAgent = container.createNewAgent("maze", "Agents.MazeAgent", new Object[] {this.getMazeSize(), this.getDoorsNumber()});
-        mazeAgent.start();
+        MazeAgent mazeAgent = new MazeAgent(this.mazeSize, this.doorsNumber);
+        container.acceptNewAgent("maze", mazeAgent).start();
 
         for (int i = 0; i < this.selfishAgents; i++) {
-            System.out.println("selfish");
             SelfishAgent selfishAgent = new SelfishAgent(Color.RED);
             container.acceptNewAgent("selfish" + i, selfishAgent).start();
             agentList.add(selfishAgent);
         }
 
         for (int i = 0; i < this.reasonableAgents; i++) {
-            ReasonableAgent reasonableAgent= new ReasonableAgent(Color.RED);
+            ReasonableAgent reasonableAgent= new ReasonableAgent(Color.GREEN);
             container.acceptNewAgent("reasonable" + i, reasonableAgent).start();
             agentList.add(reasonableAgent);
         }
 
         for (int i = 0; i < this.supportiveAgents; i++) {
-            SupportiveAgent supportiveAgent = new SupportiveAgent(Color.RED);
+            SupportiveAgent supportiveAgent = new SupportiveAgent(Color.BLUE);
             container.acceptNewAgent("supportive" + i, supportiveAgent).start();
             agentList.add(supportiveAgent);
         }

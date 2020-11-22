@@ -22,14 +22,13 @@ public class MazeAgent extends Agent {
     Maze maze;
     MazeRunner mazeRunner;
 
+    public MazeAgent(int mazeSize, int doorsNumber) {
+        maze = new Maze(mazeSize, doorsNumber);
+        mazeRunner = new MazeRunner(maze);
+    }
+
     @Override
     protected void setup() {
-        System.out.println("i'm a maze");
-        Object[] args = getArguments();
-        int mazeSize = (Integer) args[0];
-        int mazeDoors = (Integer) args[1];
-        maze = new Maze(mazeSize, mazeDoors);
-        mazeRunner = new MazeRunner(maze);
 
         registerMazeToDF();
 

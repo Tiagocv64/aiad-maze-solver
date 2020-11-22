@@ -3,7 +3,6 @@ package Agents;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import uchicago.src.sim.space.Object2DTorus;
 
 import java.awt.*;
 
