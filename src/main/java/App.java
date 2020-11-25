@@ -4,21 +4,13 @@ import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
 import sajas.core.Runtime;
 import sajas.sim.repast3.Repast3Launcher;
-import sajas.wrapper.AgentController;
 import sajas.wrapper.ContainerController;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
 import uchicago.src.sim.engine.BasicAction;
-import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
-import uchicago.src.sim.engine.SimModelImpl;
-import uchicago.src.sim.gui.DisplaySurface;
-import uchicago.src.sim.gui.Object2DDisplay;
-import uchicago.src.sim.space.Object2DTorus;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 
 public class App extends Repast3Launcher {
@@ -29,8 +21,6 @@ public class App extends Repast3Launcher {
     private int reasonableAgents;
     private int supportiveAgents;
     private ArrayList<BaseAgent> agentList;
-    private DisplaySurface dsurf;
-    private Object2DTorus space;
     private OpenSequenceGraph plot;
     private ContainerController container;
 
@@ -135,28 +125,13 @@ public class App extends Repast3Launcher {
     @Override
     public void begin() {
         super.begin();
-        buildDisplay();
+        // buildDisplay();
         buildSchedule();
     }
 
 
-
-    private void buildDisplay() {
-        // space and display surface
-        if (dsurf != null) dsurf.dispose();
-        dsurf = new DisplaySurface(this, "Maze Display");
-        registerDisplaySurface("Maze Display", dsurf);
-        space = new Object2DTorus(mazeSize, mazeSize);
-
-        Object2DDisplay display = new Object2DDisplay(space);
-        // display.setObjectList(agentList);
-        dsurf.addDisplayableProbeable(display, "Agents Space");
-        dsurf.display();
-    }
-
     private void buildSchedule() {
         getSchedule().scheduleActionBeginning(0, new MainAction());
-        getSchedule().scheduleActionAtInterval(1, dsurf, "updateDisplay", Schedule.LAST);
         // schedule.scheduleActionAtInterval(1, plot, "step", Schedule.LAST);
     }
 

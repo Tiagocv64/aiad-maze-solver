@@ -305,7 +305,6 @@ public abstract class BaseAgent extends Agent {
 
         @Override
         public void action() {
-            System.out.println(getLocalName() + " searching");
             if (mazeRunner == null || standingOnButton) { // waits for maze info
                 return;
             }
