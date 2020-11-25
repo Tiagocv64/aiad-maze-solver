@@ -55,6 +55,9 @@ public abstract class BaseAgent extends Agent {
         this.toVisit.push(this.position);
     }
 
+    public Integer getEffort() {
+        return effort;
+    }
 
     @Override
     protected void setup() {
@@ -322,7 +325,7 @@ public abstract class BaseAgent extends Agent {
             }
 
             try {
-                TimeUnit.MILLISECONDS.sleep(600);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

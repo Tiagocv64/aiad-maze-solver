@@ -5,7 +5,9 @@ import jade.wrapper.StaleProxyException;
 import sajas.core.Runtime;
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.wrapper.ContainerController;
+import uchicago.src.sim.analysis.OpenHistogram;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.analysis.Sequence;
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.SimInit;
 
@@ -21,7 +23,10 @@ public class App extends Repast3Launcher {
     private int reasonableAgents;
     private int supportiveAgents;
     private ArrayList<BaseAgent> agentList;
-    private OpenSequenceGraph plot;
+    private ArrayList<ReasonableAgent> reasonableAgentList;
+    private ArrayList<SupportiveAgent> supportiveAgentList;
+    private ArrayList<SelfishAgent> selfishAgentList;
+    private OpenSequenceGraph effortGraph;
     private ContainerController container;
 
 
@@ -33,6 +38,9 @@ public class App extends Repast3Launcher {
         this.reasonableAgents = 2;
         this.supportiveAgents = 2;
         this.agentList = new ArrayList<>();
+        this.reasonableAgentList = new ArrayList<>();
+        this.supportiveAgentList = new ArrayList<>();
+        this.selfishAgentList = new ArrayList<>();
     }
 
 
@@ -106,18 +114,21 @@ public class App extends Repast3Launcher {
             SelfishAgent selfishAgent = new SelfishAgent(Color.RED);
             container.acceptNewAgent("selfish" + i, selfishAgent).start();
             agentList.add(selfishAgent);
+            selfishAgentList.add(selfishAgent);
         }
 
         for (int i = 0; i < this.reasonableAgents; i++) {
             ReasonableAgent reasonableAgent= new ReasonableAgent(Color.GREEN);
             container.acceptNewAgent("reasonable" + i, reasonableAgent).start();
             agentList.add(reasonableAgent);
+            reasonableAgentList.add(reasonableAgent);
         }
 
         for (int i = 0; i < this.supportiveAgents; i++) {
             SupportiveAgent supportiveAgent = new SupportiveAgent(Color.BLUE);
             container.acceptNewAgent("supportive" + i, supportiveAgent).start();
             agentList.add(supportiveAgent);
+            supportiveAgentList.add(supportiveAgent);
         }
     }
 
@@ -125,14 +136,51 @@ public class App extends Repast3Launcher {
     @Override
     public void begin() {
         super.begin();
-        // buildDisplay();
+        buildEffortHistogram();
         buildSchedule();
     }
 
+    private void buildEffortHistogram() {
+        if (effortGraph != null) effortGraph.dispose();
+        effortGraph = new OpenSequenceGraph("Effort by Agent Type", this);
+        effortGraph.setAxisTitles("time", "effort");
+
+        effortGraph.addSequence("Reasonable Effort", new Sequence() {
+            public double getSValue() {
+                double effort = 0;
+                for (int i = 0; i < reasonableAgentList.size(); i++) {
+                    effort += reasonableAgentList.get(i).getEffort();
+                }
+                return effort;
+            }
+        });
+
+        effortGraph.addSequence("Supportive Effort", new Sequence() {
+            public double getSValue() {
+                double effort = 0;
+                for (int i = 0; i < supportiveAgentList.size(); i++) {
+                    effort += supportiveAgentList.get(i).getEffort();
+                }
+                return effort;
+            }
+        });
+
+        effortGraph.addSequence("Selfish Effort", new Sequence() {
+            public double getSValue() {
+                double effort = 0;
+                for (int i = 0; i < selfishAgentList.size(); i++) {
+                    effort += selfishAgentList.get(i).getEffort();
+                }
+                return effort;
+            }
+        });
+
+        effortGraph.display();
+    }
 
     private void buildSchedule() {
         getSchedule().scheduleActionBeginning(0, new MainAction());
-        // schedule.scheduleActionAtInterval(1, plot, "step", Schedule.LAST);
+        getSchedule().scheduleActionAtInterval(1, effortGraph, "step", getSchedule().LAST);
     }
 
     class MainAction extends BasicAction {
