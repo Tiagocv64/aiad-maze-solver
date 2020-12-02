@@ -40,7 +40,7 @@ public abstract class BaseAgent extends Agent {
     Integer waitingDoor = -1;
     Boolean standingOnButton = false;
     AgentInfo info;
-    AgentMazeInfo agentMazeInfo;
+    public AgentMazeInfo agentMazeInfo;
     Integer buttonToFind = -1; // initial goal is to find the end of the maze, but can also be to find a button
     Integer effort = 0;
     Stack<Position> pathToButton = null;

@@ -11,7 +11,7 @@ import java.util.Set;
 public class AgentMazeInfo {
 
     int N;
-    CellInfo[][] cellsInfo;
+    public CellInfo[][] cellsInfo;
     private HashMap<Integer, Button> buttons = new HashMap<>();
     Set<Integer> foundDoors = new HashSet<>();
     Set<Integer> openDoors = new HashSet<>();

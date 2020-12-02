@@ -27,6 +27,7 @@ public class App extends Repast3Launcher {
     private ArrayList<SupportiveAgent> supportiveAgentList;
     private ArrayList<SelfishAgent> selfishAgentList;
     private OpenSequenceGraph effortGraph;
+    private OpenSequenceGraph percentageExploredGraph;
     private ContainerController container;
 
 
@@ -136,8 +137,40 @@ public class App extends Repast3Launcher {
     @Override
     public void begin() {
         super.begin();
+        buildPercentageExploredHistogram();
         buildEffortHistogram();
         buildSchedule();
+    }
+
+    private void buildPercentageExploredHistogram() {
+        if (percentageExploredGraph != null) percentageExploredGraph.dispose();
+        percentageExploredGraph = new OpenSequenceGraph("Percentage explored labyrinth", this);
+        percentageExploredGraph.setAxisTitles("time", "explored %");
+
+        percentageExploredGraph.addSequence("Explored percentage", new Sequence() {
+            public double getSValue() {
+                double explored = 0;
+                double total = 0;
+
+                BaseAgent baseAgent = agentList.get(0);
+
+                if (baseAgent.agentMazeInfo == null)
+                    return 0.0;
+
+                for (int i = 0; i < baseAgent.agentMazeInfo.cellsInfo.length; i++){
+                    for (int j = 0; j < baseAgent.agentMazeInfo.cellsInfo.length; j++){
+                        if (baseAgent.agentMazeInfo.cellsInfo[i][j].getState() == AgentMazeInfo.CellInfo.EXPLORED){
+                            explored++;
+                        }
+                        total++;
+                    }
+                }
+
+                return explored / total * 100.0;
+            }
+        });
+
+        percentageExploredGraph.display();
     }
 
     private void buildEffortHistogram() {
@@ -181,6 +214,7 @@ public class App extends Repast3Launcher {
     private void buildSchedule() {
         getSchedule().scheduleActionBeginning(0, new MainAction());
         getSchedule().scheduleActionAtInterval(1, effortGraph, "step", getSchedule().LAST);
+        getSchedule().scheduleActionAtInterval(2, percentageExploredGraph, "step", getSchedule().LAST);
     }
 
     class MainAction extends BasicAction {
