@@ -68,6 +68,8 @@ public abstract class BaseAgent extends Agent {
         System.out.println(this.getLocalName() + " Ask maze info");
         sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
 
+        System.out.println(this.getLocalName() + " setup");
+
         try {
             Thread.sleep(new Random().nextInt(1000));
         } catch (InterruptedException e) {
@@ -318,6 +320,10 @@ public abstract class BaseAgent extends Agent {
                 e.printStackTrace();
             } */
         }
+
+    public void askForMazeRunner() {
+        sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
+    }
 
 
     class ListeningBehaviour extends Behaviour {

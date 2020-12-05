@@ -35,6 +35,7 @@ public class MazeAgent extends Agent {
         addBehaviour(new ListeningBehaviour(maze));
 
         drawMaze();
+        System.out.println("Maze agent setup");
     }
 
     @Override

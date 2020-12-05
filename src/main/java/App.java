@@ -117,11 +117,6 @@ public class App extends Repast3Launcher {
     private void launchAgents() throws StaleProxyException {
         MazeAgent mazeAgent = new MazeAgent(this.mazeSize, this.doorsNumber);
         container.acceptNewAgent("maze", mazeAgent).start();
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         for (int i = 0; i < this.selfishAgents; i++) {
             SelfishAgent selfishAgent = new SelfishAgent(Color.RED);
@@ -234,6 +229,7 @@ public class App extends Repast3Launcher {
         public void execute() {
             for (int i = 0; i < agentList.size(); i++) {
                 if (agentList.get(i).getMazeRunner() == null) {
+                    agentList.get(i).askForMazeRunner();
                     return;
                 }
             }
