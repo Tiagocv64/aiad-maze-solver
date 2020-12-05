@@ -186,7 +186,7 @@ public class App extends Repast3Launcher {
                 }
                 return effort;
             }
-        });
+        }, Color.GREEN);
 
         effortGraph.addSequence("Supportive Effort", new Sequence() {
             public double getSValue() {
@@ -196,7 +196,7 @@ public class App extends Repast3Launcher {
                 }
                 return effort;
             }
-        });
+        }, Color.BLUE);
 
         effortGraph.addSequence("Selfish Effort", new Sequence() {
             public double getSValue() {
@@ -206,7 +206,7 @@ public class App extends Repast3Launcher {
                 }
                 return effort;
             }
-        });
+        }, Color.RED);
 
         effortGraph.display();
     }
