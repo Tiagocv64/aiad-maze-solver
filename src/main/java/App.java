@@ -31,6 +31,7 @@ public class App extends Repast3Launcher {
     private OpenSequenceGraph effortGraph;
     private OpenSequenceGraph percentageExploredGraph;
     private ContainerController container;
+    private MazeAgent mazeAgent;
 
 
     public App() {
@@ -116,6 +117,7 @@ public class App extends Repast3Launcher {
 
     private void launchAgents() throws StaleProxyException {
         MazeAgent mazeAgent = new MazeAgent(this.mazeSize, this.doorsNumber);
+        this.mazeAgent = mazeAgent;
         container.acceptNewAgent("maze", mazeAgent).start();
 
         for (int i = 0; i < this.selfishAgents; i++) {
@@ -225,17 +227,23 @@ public class App extends Repast3Launcher {
     }
 
     class MainAction extends BasicAction {
+        boolean allAgentsReady = false;
 
         public void execute() {
-            for (int i = 0; i < agentList.size(); i++) {
-                if (agentList.get(i).getMazeRunner() == null) {
-                    agentList.get(i).askForMazeRunner();
-                    return;
+            if(!allAgentsReady) {
+                for (int i = 0; i < agentList.size(); i++) {
+                    if (agentList.get(i).getMazeRunner() == null) {
+                        agentList.get(i).askForMazeRunner();
+                        return;
+                    }
                 }
+                allAgentsReady = true;
             }
             for (int i = 0; i < agentList.size(); i++) {
                 agentList.get(i).action();
             }
+            mazeAgent.getPanel().repaint();
+
         }
 
     }

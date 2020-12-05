@@ -21,11 +21,17 @@ public class MazeAgent extends Agent {
 
     Maze maze;
     MazeRunner mazeRunner;
+    MazePanel panel;
 
     public MazeAgent(int mazeSize, int doorsNumber) {
         maze = new Maze(mazeSize, doorsNumber);
         mazeRunner = new MazeRunner(maze);
     }
+
+    public MazePanel getPanel() {
+        return panel;
+    }
+
 
     @Override
     protected void setup() {
@@ -35,7 +41,6 @@ public class MazeAgent extends Agent {
         addBehaviour(new ListeningBehaviour(maze));
 
         drawMaze();
-        System.out.println("Maze agent setup");
     }
 
     @Override
@@ -50,7 +55,7 @@ public class MazeAgent extends Agent {
 
     private void drawMaze(){
         JFrame frame = new JFrame("Maze");
-        MazePanel panel = new MazePanel(maze); // Constructs the panel to hold the maze
+        panel = new MazePanel(maze); // Constructs the panel to hold the maze
         JScrollPane scrollPane = new JScrollPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(maze.windowSize());

@@ -65,10 +65,8 @@ public abstract class BaseAgent extends Agent {
         listeningBehaviour = new ListeningBehaviour(this);
         addBehaviour(listeningBehaviour);
 
-        System.out.println(this.getLocalName() + " Ask maze info");
         sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
 
-        System.out.println(this.getLocalName() + " setup");
 
         try {
             Thread.sleep(new Random().nextInt(1000));
@@ -351,7 +349,6 @@ public abstract class BaseAgent extends Agent {
 
                 switch (agentMessage.getDescription()) {
                     case AgentMessage.ANSWER_MAZE_INFO:
-                        System.out.println(baseAgent.getLocalName() + " received maze runner");
                         mazeRunner = (MazeRunner) agentMessage.getContent();
                         agentMazeInfo = new AgentMazeInfo(mazeRunner.maze.N);
                         break;

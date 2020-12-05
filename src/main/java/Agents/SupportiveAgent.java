@@ -50,9 +50,6 @@ public class SupportiveAgent extends BaseAgent {
                 try {
                     AgentMessage agentMessage = (AgentMessage) cfp.getContentObject();
                     buttonToFind = (Integer) ((Object[]) agentMessage.getContent())[0];
-                    System.out.println("button to find: " + buttonToFind);
-                    System.out.println(mazeRunner);
-                    System.out.println(mazeRunner.maze);
                     Button button = mazeRunner.maze.getButton(buttonToFind);
                     distance = mazeRunner.getPathBetween(position,  new Position(button.getCell() % mazeRunner.maze.N, button.getCell() / mazeRunner.maze.N)).size();
                     System.out.println("Agent "+getLocalName()+": Proposing "+ distance + " to " + cfp.getSender().getLocalName());

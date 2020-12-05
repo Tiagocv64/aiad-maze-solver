@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Maze implements Serializable
 {
@@ -19,9 +20,9 @@ public class Maze implements Serializable
     public Cell[] cells; // array containing all the cells in the maze
     private boolean[] path; // array representing the unique path solution
     private List<Color> colors = new ArrayList<>();
-    private HashMap<Integer, Door> doors = new HashMap<Integer, Door>();
-    private HashMap<Integer, Button> buttons = new HashMap<Integer, Button>();
-    private HashMap<Position, Set<AgentInfo>> agentPositions = new HashMap<Position, Set<AgentInfo>>();
+    private ConcurrentHashMap<Integer, Door> doors = new ConcurrentHashMap<Integer, Door>();
+    private ConcurrentHashMap<Integer, Button> buttons = new ConcurrentHashMap<Integer, Button>();
+    private ConcurrentHashMap<Position, Set<AgentInfo>> agentPositions = new ConcurrentHashMap<Position, Set<AgentInfo>>();
     private int doorsNumber;
     private boolean found = false;
     private boolean exitFound = false;
