@@ -11,7 +11,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import sajas.proto.ContractNetResponder;
-import uchicago.src.sim.space.Object2DTorus;
 
 import java.awt.*;
 import java.io.IOException;

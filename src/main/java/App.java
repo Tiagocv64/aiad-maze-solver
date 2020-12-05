@@ -13,6 +13,8 @@ import uchicago.src.sim.engine.SimInit;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class App extends Repast3Launcher {
@@ -102,6 +104,11 @@ public class App extends Repast3Launcher {
         container = rt.createMainContainer(p);
         try {
             launchAgents();
+            try {
+                TimeUnit.MILLISECONDS.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
@@ -110,6 +117,11 @@ public class App extends Repast3Launcher {
     private void launchAgents() throws StaleProxyException {
         MazeAgent mazeAgent = new MazeAgent(this.mazeSize, this.doorsNumber);
         container.acceptNewAgent("maze", mazeAgent).start();
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         for (int i = 0; i < this.selfishAgents; i++) {
             SelfishAgent selfishAgent = new SelfishAgent(Color.RED);
@@ -220,7 +232,14 @@ public class App extends Repast3Launcher {
     class MainAction extends BasicAction {
 
         public void execute() {
-            // System.out.println("tick");
+            for (int i = 0; i < agentList.size(); i++) {
+                if (agentList.get(i).getMazeRunner() == null) {
+                    return;
+                }
+            }
+            for (int i = 0; i < agentList.size(); i++) {
+                agentList.get(i).action();
+            }
         }
 
     }

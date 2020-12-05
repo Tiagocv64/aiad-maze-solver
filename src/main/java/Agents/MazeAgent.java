@@ -93,7 +93,7 @@ public class MazeAgent extends Agent {
 
                 switch (agentMessage.getDescription()){
                     case AgentMessage.ASK_MAZE_INFO:
-
+                        System.out.println("someone asked maze info");
                         try {
                             ACLMessage reply = msg.createReply();
                             reply.setPerformative(ACLMessage.INFORM);
