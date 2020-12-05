@@ -491,7 +491,11 @@ public class Maze implements Serializable
 
                 Position pos = new Position(i, j);
                 if (agentPositions.containsKey(pos)) {
-                    g.setColor(agentPositions.get(pos).iterator().next().color);
+                    try {
+                        g.setColor(agentPositions.get(pos).iterator().next().color);
+                    } catch (NoSuchElementException e) {
+                        g.setColor(Color.white);
+                    }
                     g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
                             + MARGIN + DOT_MARGIN, DOT_SIZE, DOT_SIZE); // paint agent
                 }
