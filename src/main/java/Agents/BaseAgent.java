@@ -227,8 +227,7 @@ public abstract class BaseAgent extends Agent {
                         break;
                     }
                 } else if (randomDirections[i] == Maze.WEST) {
-                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY())) &&
-                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.WEST))) {
+                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))) {
                         next = new Position(position.getX() - 1, position.getY());
                         break;
                     }
@@ -236,7 +235,7 @@ public abstract class BaseAgent extends Agent {
             }
 
             if (next == null) { // dead end
-                toVisit.pop();
+                Position test = toVisit.pop();
                 next = toVisit.pop();
             }
 

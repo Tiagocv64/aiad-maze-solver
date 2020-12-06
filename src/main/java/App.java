@@ -303,7 +303,6 @@ public class App extends Repast3Launcher {
                 agentList.get(i).action();
             }
             mazeAgent.getPanel().repaint();
-
         }
 
     }

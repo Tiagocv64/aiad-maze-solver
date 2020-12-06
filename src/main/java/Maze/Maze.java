@@ -493,7 +493,7 @@ public class Maze implements Serializable
                 if (agentPositions.containsKey(pos)) {
                     try {
                         g.setColor(agentPositions.get(pos).iterator().next().color);
-                    } catch (NoSuchElementException e) {
+                    } catch (NoSuchElementException | NullPointerException | ConcurrentModificationException e) {
                         g.setColor(Color.white);
                     }
                     g.fillRect(i * CELL_WIDTH + MARGIN + DOT_MARGIN, j * CELL_WIDTH
