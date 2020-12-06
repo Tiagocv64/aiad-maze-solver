@@ -5,7 +5,6 @@ import jade.wrapper.StaleProxyException;
 import sajas.core.Runtime;
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.wrapper.ContainerController;
-import uchicago.src.sim.analysis.OpenHistogram;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
 import uchicago.src.sim.analysis.Sequence;
 import uchicago.src.sim.engine.BasicAction;
@@ -13,7 +12,6 @@ import uchicago.src.sim.engine.SimInit;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -30,6 +28,7 @@ public class App extends Repast3Launcher {
     private ArrayList<SelfishAgent> selfishAgentList;
     private OpenSequenceGraph effortGraph;
     private OpenSequenceGraph percentageExploredGraph;
+    private OpenSequenceGraph completionTimeGraph;
     private ContainerController container;
     private MazeAgent mazeAgent;
 
@@ -146,12 +145,13 @@ public class App extends Repast3Launcher {
     @Override
     public void begin() {
         super.begin();
-        buildPercentageExploredHistogram();
-        buildEffortHistogram();
+        buildPercentageExploredGraph();
+        buildEffortGraph();
+        buildCompletionTimeGraph();
         buildSchedule();
     }
 
-    private void buildPercentageExploredHistogram() {
+    private void buildPercentageExploredGraph() {
         if (percentageExploredGraph != null) percentageExploredGraph.dispose();
         percentageExploredGraph = new OpenSequenceGraph("Percentage explored labyrinth", this);
         percentageExploredGraph.setAxisTitles("time", "explored %");
@@ -182,7 +182,7 @@ public class App extends Repast3Launcher {
         percentageExploredGraph.display();
     }
 
-    private void buildEffortHistogram() {
+    private void buildEffortGraph() {
         if (effortGraph != null) effortGraph.dispose();
         effortGraph = new OpenSequenceGraph("Effort by Agent Type", this);
         effortGraph.setAxisTitles("time", "effort");
@@ -220,10 +220,70 @@ public class App extends Repast3Launcher {
         effortGraph.display();
     }
 
+    private void buildCompletionTimeGraph() {
+        if (completionTimeGraph != null) effortGraph.dispose();
+        completionTimeGraph = new OpenSequenceGraph("Completion Time by Agent Type", this);
+        completionTimeGraph.setAxisTitles("time", "average time");
+
+        completionTimeGraph.addSequence("Reasonable Average Time", new Sequence() {
+            public double getSValue() {
+                double totalTime = 0;
+                int agentsCompleted = 0;
+                for (int i = 0; i < reasonableAgentList.size(); i++) {
+                    if (reasonableAgentList.get(i).hasFinished()) {
+                        totalTime += reasonableAgentList.get(i).getActionCounter();
+                        agentsCompleted++;
+                    }
+                }
+                if (totalTime != 0)
+                    return totalTime / agentsCompleted;
+                else
+                    return 0;
+            }
+        }, Color.GREEN);
+
+        completionTimeGraph.addSequence("Supportive Average Time", new Sequence() {
+            public double getSValue() {
+                double totalTime = 0;
+                int agentsCompleted = 0;
+                for (int i = 0; i < supportiveAgentList.size(); i++) {
+                    if (supportiveAgentList.get(i).hasFinished()) {
+                        totalTime += supportiveAgentList.get(i).getActionCounter();
+                        agentsCompleted++;
+                    }
+                }
+                if (totalTime != 0)
+                    return totalTime / agentsCompleted;
+                else
+                    return 0;
+            }
+        }, Color.BLUE);
+
+        completionTimeGraph.addSequence("Selfish Average Time", new Sequence() {
+            public double getSValue() {
+                double totalTime = 0;
+                int agentsCompleted = 0;
+                for (int i = 0; i < selfishAgentList.size(); i++) {
+                    if (selfishAgentList.get(i).hasFinished()) {
+                        totalTime += selfishAgentList.get(i).getActionCounter();
+                        agentsCompleted++;
+                    }
+                }
+                if (totalTime != 0)
+                    return totalTime / agentsCompleted;
+                else
+                    return 0;
+            }
+        }, Color.RED);
+
+        completionTimeGraph.display();
+    }
+
     private void buildSchedule() {
         getSchedule().scheduleActionBeginning(0, new MainAction());
         getSchedule().scheduleActionAtInterval(1, effortGraph, "step", getSchedule().LAST);
         getSchedule().scheduleActionAtInterval(2, percentageExploredGraph, "step", getSchedule().LAST);
+        getSchedule().scheduleActionAtInterval(2, completionTimeGraph, "step", getSchedule().LAST);
     }
 
     class MainAction extends BasicAction {

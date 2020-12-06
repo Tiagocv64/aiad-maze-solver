@@ -31,6 +31,7 @@ public abstract class BaseAgent extends Agent {
     Boolean isHandlingRequest = false;
     Boolean isWaiting = false;
     Integer waitingDoor = -1;
+    Integer actionCounter = 0;
     Boolean standingOnButton = false;
     AgentInfo info;
     public AgentMazeInfo agentMazeInfo;
@@ -51,6 +52,14 @@ public abstract class BaseAgent extends Agent {
 
     public Integer getEffort() {
         return effort;
+    }
+
+    public Integer getActionCounter() {
+        return actionCounter;
+    }
+
+    public Boolean hasFinished() {
+        return finished;
     }
 
     public MazeRunner getMazeRunner()  {
@@ -299,6 +308,7 @@ public abstract class BaseAgent extends Agent {
             if (mazeRunner == null || standingOnButton || finished) { // waits for maze info
                 return;
             }
+            actionCounter++;
 
             if (isHandlingRequest && buttonToFind != -1) {
                 searchButton();
