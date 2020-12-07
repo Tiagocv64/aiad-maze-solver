@@ -104,11 +104,11 @@ public class App extends Repast3Launcher {
         container = rt.createMainContainer(p);
         try {
             launchAgents();
-            try {
-                TimeUnit.MILLISECONDS.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                TimeUnit.MILLISECONDS.sleep(2000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }

@@ -97,7 +97,7 @@ public class Maze implements Serializable
             }
         }
 
-        if (!agentPositions.containsKey(next)) {
+        if (!agentPositions.containsKey(next)) { // TODO sometimes next is null and throws exception
             agentPositions.put(next, new HashSet<>());
         }
 

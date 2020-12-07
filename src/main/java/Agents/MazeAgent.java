@@ -89,7 +89,7 @@ public class MazeAgent extends Agent {
         public void action() {
 
             ACLMessage msg = receive();
-            if(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
+            while(msg != null && msg.getPerformative() == ACLMessage.INFORM) {
                 AgentMessage agentMessage = null;
                 try {
                     agentMessage = (AgentMessage) msg.getContentObject();
@@ -129,6 +129,7 @@ public class MazeAgent extends Agent {
                         break;
                     default:
                 }
+                msg = receive();
             }
         }
 

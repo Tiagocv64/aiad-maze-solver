@@ -19,6 +19,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public abstract class BaseAgent extends Agent {
@@ -77,11 +78,11 @@ public abstract class BaseAgent extends Agent {
         sendMessageToMaze(new AgentMessage(getAID(), AgentMessage.ASK_MAZE_INFO, ""));
 
 
-        try {
-            Thread.sleep(new Random().nextInt(1000));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(new Random().nextInt(1000));
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -227,7 +228,8 @@ public abstract class BaseAgent extends Agent {
                         break;
                     }
                 } else if (randomDirections[i] == Maze.WEST) {
-                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY()))) {
+                    if (possibleMoves[Maze.WEST] && !visited.contains(new Position(position.getX() - 1, position.getY())) &&
+                            (possibleMovesUnexplored.size() == 0 || possibleMovesUnexplored.contains(Maze.WEST))) {
                         next = new Position(position.getX() - 1, position.getY());
                         break;
                     }
@@ -235,8 +237,18 @@ public abstract class BaseAgent extends Agent {
             }
 
             if (next == null) { // dead end
-                Position test = toVisit.pop();
-                next = toVisit.pop();
+                try {
+                    Position test = toVisit.pop();
+                    next = toVisit.pop();
+                } catch (Exception e){
+                    System.out.println("ERRRRRRRRRORRRRR");
+                    System.out.println(position.getX() + " " + position.getY());
+                    System.out.println(getAID().getLocalName());
+                    System.out.println("VISITED");
+                    for (Position move : visited)
+                        System.out.println(move.getX() + " " + move.getY());
+
+                }
             }
 
             toVisit.push(next);
@@ -321,11 +333,11 @@ public abstract class BaseAgent extends Agent {
                 searchGoal();
             }
 
-            /* try {
-                TimeUnit.MILLISECONDS.sleep(100);
+             try {
+                TimeUnit.MILLISECONDS.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } */
+            }
         }
 
     public void askForMazeRunner() {
@@ -360,6 +372,7 @@ public abstract class BaseAgent extends Agent {
                     case AgentMessage.ANSWER_MAZE_INFO:
                         mazeRunner = (MazeRunner) agentMessage.getContent();
                         agentMazeInfo = new AgentMazeInfo(mazeRunner.maze.N);
+                        baseAgent.agentMazeInfo.cellsInfo[0][0].setState(AgentMazeInfo.CellInfo.EXPLORED);
                         break;
 
                     case AgentMessage.INFORM_AGENTS_OF_MOVE:
