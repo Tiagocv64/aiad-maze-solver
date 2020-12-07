@@ -53,7 +53,9 @@ public class App extends Repast3Launcher {
         this.selfishAgentList = new ArrayList<>();
         this.openCSVFiles();
 
+        System.out.println("app running");
         java.lang.Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            flsuhCSVFiles();
             closeCSVFiles();
         }));
     }
@@ -75,16 +77,24 @@ public class App extends Repast3Launcher {
 
     public void closeCSVFiles() {
         try {
-            reasonableCSV.flush();
             reasonableCSV.close();
-            supportiveCSV.flush();
             supportiveCSV.close();
-            selfishCSV.flush();
             selfishCSV.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void flsuhCSVFiles() {
+        try {
+            reasonableCSV.flush();
+            supportiveCSV.flush();
+            selfishCSV.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public String getName() {
@@ -141,9 +151,9 @@ public class App extends Repast3Launcher {
         Runtime rt = Runtime.instance();
         Profile p = new ProfileImpl();
         container = rt.createMainContainer(p);
+        flsuhCSVFiles();
         try {
             launchAgents();
-            closeCSVFiles();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
