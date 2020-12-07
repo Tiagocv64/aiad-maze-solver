@@ -1,0 +1,5 @@
+Doors: 3
+Size: 15 x 15
+Reasonable Agents: 4
+Selfish Agents: 4
+Supportive Agents: 4
