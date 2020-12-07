@@ -307,8 +307,6 @@ public abstract class BaseAgent extends Agent {
                 buttonToFind = -1;
                 standingOnButton = true;
             }
-
-            mazeRunner.updatePosition(position, next, info);
         }
 
         @Override
