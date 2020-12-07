@@ -328,21 +328,8 @@ public class App extends Repast3Launcher {
     }
 
     class MainAction extends BasicAction {
-        boolean allAgentsReady = false;
 
         public void execute() {
-            if(!allAgentsReady) {
-                for (int i = 0; i < agentList.size(); i++) {
-                    if (agentList.get(i).getMazeRunner() == null) {
-                        agentList.get(i).askForMazeRunner();
-                        return;
-                    }
-                }
-                allAgentsReady = true;
-            }
-            for (int i = 0; i < agentList.size(); i++) {
-                agentList.get(i).action();
-            }
             mazeAgent.getPanel().repaint();
         }
 
