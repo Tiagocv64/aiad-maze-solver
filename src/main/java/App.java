@@ -11,8 +11,11 @@ import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.SimInit;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.lang.*;
 
 
 public class App extends Repast3Launcher {
@@ -32,6 +35,9 @@ public class App extends Repast3Launcher {
     private OpenSequenceGraph exploredCellsByAgentGraph;
     private ContainerController container;
     private MazeAgent mazeAgent;
+    private FileWriter reasonableCSV;
+    private FileWriter supportiveCSV;
+    private FileWriter selfishCSV;
 
 
     public App() {
@@ -45,8 +51,40 @@ public class App extends Repast3Launcher {
         this.reasonableAgentList = new ArrayList<>();
         this.supportiveAgentList = new ArrayList<>();
         this.selfishAgentList = new ArrayList<>();
+        this.openCSVFiles();
+
+        java.lang.Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            closeCSVFiles();
+        }));
     }
 
+    private void openCSVFiles() {
+        File directory = new File("logs");
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+        try {
+            reasonableCSV = new FileWriter("logs" + File.separatorChar + "reasonable.csv", true);
+            supportiveCSV = new FileWriter("logs" + File.separatorChar + "supportive.csv", true);
+            selfishCSV = new FileWriter("logs" + File.separatorChar + "selfish.csv", true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void closeCSVFiles() {
+        try {
+            reasonableCSV.flush();
+            reasonableCSV.close();
+            supportiveCSV.flush();
+            supportiveCSV.close();
+            selfishCSV.flush();
+            selfishCSV.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String getName() {
@@ -105,11 +143,7 @@ public class App extends Repast3Launcher {
         container = rt.createMainContainer(p);
         try {
             launchAgents();
-//            try {
-//                TimeUnit.MILLISECONDS.sleep(2000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            closeCSVFiles();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
@@ -261,7 +295,7 @@ public class App extends Repast3Launcher {
     }
 
     private void buildCompletionTimeGraph() {
-        if (completionTimeGraph != null) effortGraph.dispose();
+        if (completionTimeGraph != null) completionTimeGraph.dispose();
         completionTimeGraph = new OpenSequenceGraph("Completion Time by Agent Type", this);
         completionTimeGraph.setAxisTitles("time", "average time");
 
@@ -271,8 +305,15 @@ public class App extends Repast3Launcher {
                 int agentsCompleted = 0;
                 for (int i = 0; i < reasonableAgentList.size(); i++) {
                     if (reasonableAgentList.get(i).hasFinished()) {
-                        totalTime += reasonableAgentList.get(i).getActionCounter();
+                        double completionTime = reasonableAgentList.get(i).getActionCounter();
+                        totalTime += completionTime;
                         agentsCompleted++;
+                        try {
+                            reasonableCSV.append("" + completionTime);
+                            reasonableCSV.append(",");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if (totalTime != 0)
@@ -288,8 +329,15 @@ public class App extends Repast3Launcher {
                 int agentsCompleted = 0;
                 for (int i = 0; i < supportiveAgentList.size(); i++) {
                     if (supportiveAgentList.get(i).hasFinished()) {
-                        totalTime += supportiveAgentList.get(i).getActionCounter();
+                        double completionTime = supportiveAgentList.get(i).getActionCounter();
+                        totalTime += completionTime;
                         agentsCompleted++;
+                        try {
+                            supportiveCSV.append("" + completionTime);
+                            supportiveCSV.append(",");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if (totalTime != 0)
@@ -305,8 +353,15 @@ public class App extends Repast3Launcher {
                 int agentsCompleted = 0;
                 for (int i = 0; i < selfishAgentList.size(); i++) {
                     if (selfishAgentList.get(i).hasFinished()) {
-                        totalTime += selfishAgentList.get(i).getActionCounter();
+                        double completionTime = selfishAgentList.get(i).getActionCounter();
+                        totalTime += completionTime;
                         agentsCompleted++;
+                        try {
+                            selfishCSV.append("" + completionTime);
+                            selfishCSV.append(",");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if (totalTime != 0)

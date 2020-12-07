@@ -318,6 +318,7 @@ public abstract class BaseAgent extends Agent {
                 return;
             }
 
+            actionCounter++;
             if (standingOnButton) { // waits for maze info
                 return;
             }
