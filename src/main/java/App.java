@@ -29,6 +29,7 @@ public class App extends Repast3Launcher {
     private OpenSequenceGraph effortGraph;
     private OpenSequenceGraph percentageExploredGraph;
     private OpenSequenceGraph completionTimeGraph;
+    private OpenSequenceGraph exploredCellsByAgentGraph;
     private ContainerController container;
     private MazeAgent mazeAgent;
 
@@ -146,9 +147,48 @@ public class App extends Repast3Launcher {
     public void begin() {
         super.begin();
         buildPercentageExploredGraph();
+        buildExploredCellsByAgentGraph();
         buildEffortGraph();
         buildCompletionTimeGraph();
         buildSchedule();
+    }
+
+    private void buildExploredCellsByAgentGraph() {
+        if (exploredCellsByAgentGraph != null) exploredCellsByAgentGraph.dispose();
+        exploredCellsByAgentGraph = new OpenSequenceGraph("Number explored cells by agent", this);
+        exploredCellsByAgentGraph.setAxisTitles("time", "nº cells");
+
+        exploredCellsByAgentGraph.addSequence("Reasonable Cells", new Sequence() {
+            public double getSValue() {
+                double cellsExplored = 0;
+                for (int i = 0; i < reasonableAgentList.size(); i++) {
+                    cellsExplored += reasonableAgentList.get(i).visited.size();
+                }
+                return cellsExplored/reasonableAgentList.size();
+            }
+        }, Color.GREEN);
+
+        exploredCellsByAgentGraph.addSequence("Supportive Cells", new Sequence() {
+            public double getSValue() {
+                double cellsExplored = 0;
+                for (int i = 0; i < supportiveAgentList.size(); i++) {
+                    cellsExplored += supportiveAgentList.get(i).visited.size();
+                }
+                return cellsExplored/supportiveAgentList.size();
+            }
+        }, Color.BLUE);
+
+        exploredCellsByAgentGraph.addSequence("Selfish Cells", new Sequence() {
+            public double getSValue() {
+                double cellsExplored = 0;
+                for (int i = 0; i < selfishAgentList.size(); i++) {
+                    cellsExplored += selfishAgentList.get(i).visited.size();
+                }
+                return cellsExplored/selfishAgentList.size();
+            }
+        }, Color.RED);
+
+        exploredCellsByAgentGraph.display();
     }
 
     private void buildPercentageExploredGraph() {
@@ -284,6 +324,7 @@ public class App extends Repast3Launcher {
         getSchedule().scheduleActionAtInterval(1, effortGraph, "step", getSchedule().LAST);
         getSchedule().scheduleActionAtInterval(2, percentageExploredGraph, "step", getSchedule().LAST);
         getSchedule().scheduleActionAtInterval(2, completionTimeGraph, "step", getSchedule().LAST);
+        getSchedule().scheduleActionAtInterval(2, exploredCellsByAgentGraph, "step", getSchedule().LAST);
     }
 
     class MainAction extends BasicAction {

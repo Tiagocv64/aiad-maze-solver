@@ -27,7 +27,7 @@ public abstract class BaseAgent extends Agent {
     MazeRunner mazeRunner = null;
     Position previousPosition;
     Position position;
-    Set<Position> visited = new HashSet<Position>();
+    public Set<Position> visited = new HashSet<Position>();
     Stack<Position> toVisit = new Stack<Position>();
     Boolean isHandlingRequest = false;
     Boolean isWaiting = false;
