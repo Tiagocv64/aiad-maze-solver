@@ -8,5 +8,5 @@ gradle build
 
 #### Run
 ```
-gradle run
+gradle run -q --console=plain
 ```
